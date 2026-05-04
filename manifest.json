@@ -1,0 +1,45 @@
+{
+  "name": "PyMEdata — Inteligencia Económica para PyMEs",
+  "short_name": "PyMEdata",
+  "description": "Diagnóstico económico, simulador de margen y plan de acción con IA para PyMEs de La Plata. Framework FCE-UNLP.",
+  "start_url": "/app.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#05071A",
+  "theme_color": "#05071A",
+  "lang": "es-AR",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%2305071A'/%3E%3Crect x='40' y='40' width='432' height='432' rx='80' fill='url(%23g)'/%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232B53D5'/%3E%3Cstop offset='1' stop-color='%234D79FF'/%3E%3C/linearGradient%3E%3Ctext x='256' y='330' text-anchor='middle' font-size='260' fill='white'%3E📊%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "label": "Dashboard principal con indicadores macro INDEC/BCRA",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tablero Principal",
+      "url": "/app.html",
+      "description": "Acceder al tablero de indicadores"
+    },
+    {
+      "name": "Diagnóstico IA",
+      "url": "/app.html#diagnostico",
+      "description": "Generar diagnóstico personalizado"
+    },
+    {
+      "name": "Simulador de Margen",
+      "url": "/app.html#simulador",
+      "description": "Simulador de margen y precios"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="PyMEdata — Plataforma de inteligencia económica para PyMEs de La Plata. Diagnóstico, simuladores y plan de acción con IA. Framework académico FCE-UNLP.">
+<meta name="theme-color" content="#05071A">
+<meta property="og:title" content="PyMEdata — Inteligencia Económica para PyMEs">
+<meta property="og:description" content="Diagnóstico personalizado, simulador de margen, escenarios macro y plan de acción con IA. Basado en el framework académico de Fernando Toledo · FCE-UNLP.">
+<meta property="og:type" content="website">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>PyMEdata — Inteligencia Económica para PyMEs de La Plata</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg0:#05071A;--bg1:#0A0E24;--bg2:#0F152E;--bg3:#162040;
+  --blue:#4D79FF;--blue2:#2B53D5;--blue3:rgba(77,121,255,.14);
+  --gold:#DDA93B;--gold2:#A87820;
+  --green:#1EC96A;--red:#EF4F4F;--amber:#F09730;--purple:#8B6FF0;
+  --t1:#EFF3FF;--t2:#7A8FBA;--t3:#3C4F70;
+  --r:14px;--rs:9px;
+  --max:1100px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg0);font-family:'Outfit',sans-serif;color:var(--t1);font-size:16px;line-height:1.6;overflow-x:hidden;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg1);}::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,7,26,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(77,121,255,.12);padding:0 24px;}
+.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-ic{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 16px rgba(77,121,255,.3);}
+.nav-logo-txt{font-size:20px;font-weight:800;color:var(--t1);letter-spacing:-.3px;}
+.nav-logo-txt span{color:var(--blue);}
+.nav-links{display:flex;align-items:center;gap:8px;}
+.nav-link{color:var(--t2);text-decoration:none;font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;transition:all .2s;}
+.nav-link:hover{color:var(--t1);background:rgba(77,121,255,.1);}
+.nav-cta{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff!important;padding:9px 20px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(77,121,255,.3);transition:filter .2s;}
+.nav-cta:hover{filter:brightness(1.1);}
+.nav-mobile-btn{display:none;background:none;border:none;cursor:pointer;color:var(--t2);font-size:22px;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 24px 60px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(77,121,255,.12) 0%,transparent 70%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(221,169,59,.08) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:800px;text-align:center;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(77,121,255,.12);border:1px solid rgba(77,121,255,.3);border-radius:20px;padding:6px 16px;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:28px;}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title{font-size:clamp(38px,6vw,68px);font-weight:900;line-height:1.08;letter-spacing:-.5px;margin-bottom:22px;}
+.hero-title span{background:linear-gradient(135deg,var(--blue),#8BA8FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--t2);max-width:600px;margin:0 auto 36px;line-height:1.65;}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:52px;}
+.btn-hero-pri{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;padding:15px 32px;border-radius:var(--r);font-size:16px;font-weight:700;text-decoration:none;box-shadow:0 6px 24px rgba(77,121,255,.35);transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-hero-pri:hover{transform:translateY(-2px);filter:brightness(1.08);}
+.btn-hero-sec{background:transparent;color:var(--t1);padding:15px 32px;border-radius:var(--r);font-size:16px;font-weight:700;text-decoration:none;border:1.5px solid rgba(255,255,255,.12);transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+.btn-hero-sec:hover{border-color:rgba(77,121,255,.5);background:rgba(77,121,255,.08);}
+.hero-stats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.hero-stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--t2);}
+.hero-stat b{color:var(--t1);}
+
+/* ── TICKER BAR ── */
+.ticker-bar{background:linear-gradient(135deg,rgba(221,169,59,.1),rgba(221,169,59,.05));border-top:1px solid rgba(221,169,59,.15);border-bottom:1px solid rgba(221,169,59,.15);padding:10px 24px;overflow:hidden;}
+.ticker-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:8px;font-size:13px;color:#F5C768;font-weight:500;}
+.ticker-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;animation:blink 2s infinite;}
+
+/* ── SECTIONS ── */
+section{padding:80px 24px;}
+.section-inner{max-width:var(--max);margin:0 auto;}
+.section-label{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.section-title{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.15;letter-spacing:-.3px;margin-bottom:16px;}
+.section-sub{font-size:17px;color:var(--t2);max-width:580px;line-height:1.65;}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:48px;}
+.feat-card{background:var(--bg1);border:1px solid rgba(255,255,255,.055);border-radius:var(--r);padding:28px;position:relative;overflow:hidden;transition:border-color .2s;}
+.feat-card:hover{border-color:rgba(77,121,255,.25);}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:0;transition:opacity .3s;}
+.feat-card:hover::before{opacity:.4;}
+.feat-ic{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px;}
+.feat-title{font-size:18px;font-weight:700;margin-bottom:8px;}
+.feat-desc{font-size:14px;color:var(--t2);line-height:1.65;}
+.feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;}
+.feat-tag{font-size:11px;font-weight:600;border-radius:5px;padding:3px 9px;}
+
+/* ── HOW IT WORKS ── */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:48px;}
+.how-card{text-align:center;padding:32px 20px;}
+.how-num{width:52px;height:52px;border-radius:50%;background:var(--blue3);border:1.5px solid rgba(77,121,255,.35);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:var(--blue);margin:0 auto 18px;}
+.how-title{font-size:17px;font-weight:700;margin-bottom:8px;}
+.how-desc{font-size:14px;color:var(--t2);line-height:1.6;}
+
+/* ── PLANS ── */
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:48px;}
+.plan-card{background:var(--bg1);border:1.5px solid rgba(255,255,255,.06);border-radius:18px;padding:28px;position:relative;transition:transform .2s;}
+.plan-card:hover{transform:translateY(-3px);}
+.plan-card.featured{border-color:rgba(77,121,255,.5);background:linear-gradient(135deg,rgba(77,121,255,.12),rgba(77,121,255,.04));}
+.plan-card.gold{border-color:rgba(221,169,59,.45);background:linear-gradient(135deg,rgba(221,169,59,.1),rgba(221,169,59,.03));}
+.plan-card.purple{border-color:rgba(139,111,240,.45);background:linear-gradient(135deg,rgba(139,111,240,.1),rgba(139,111,240,.03));}
+.plan-badge{position:absolute;top:16px;right:16px;font-size:9px;font-weight:800;border-radius:5px;padding:3px 9px;text-transform:uppercase;letter-spacing:.5px;}
+.plan-name{font-size:20px;font-weight:800;margin-bottom:4px;}
+.plan-price{font-size:34px;font-weight:900;line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums;}
+.plan-ars{font-size:13px;color:var(--t2);margin-bottom:6px;font-family:'JetBrains Mono',monospace;}
+.plan-period{font-size:13px;color:var(--t3);margin-bottom:16px;}
+.plan-feats{list-style:none;margin-bottom:20px;}
+.plan-feats li{font-size:13px;color:var(--t2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:8px;align-items:flex-start;line-height:1.4;}
+.plan-feats li:last-child{border-bottom:none;}
+.plan-feats li.y{color:var(--t1);}
+.plan-feats li .ck{flex-shrink:0;margin-top:2px;}
+.plan-btn{display:block;width:100%;padding:12px;border-radius:12px;border:none;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:center;text-decoration:none;transition:all .2s;}
+.plan-btn-blue{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;box-shadow:0 4px 16px rgba(77,121,255,.3);}
+.plan-btn-gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#09090E;box-shadow:0 4px 16px rgba(221,169,59,.25);}
+.plan-btn-ghost{background:transparent;color:var(--blue);border:1.5px solid rgba(77,121,255,.35);}
+.plan-btn-purple{background:linear-gradient(135deg,#5B3ED4,var(--purple));color:#fff;box-shadow:0 4px 16px rgba(139,111,240,.3);}
+
+/* ── INSTALL ── */
+.install-box{background:var(--bg1);border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:40px;display:flex;flex-wrap:wrap;gap:40px;align-items:center;margin-top:48px;}
+.install-text{flex:1;min-width:260px;}
+.install-steps{flex:1;min-width:260px;}
+.install-step{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;}
+.install-step-num{width:28px;height:28px;border-radius:50%;background:var(--blue3);border:1px solid rgba(77,121,255,.3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;}
+.install-step-txt{font-size:14px;color:var(--t2);line-height:1.55;}
+.install-step-txt b{color:var(--t1);}
+
+/* ── BENCHMARK ── */
+.bench-table{width:100%;border-collapse:collapse;margin-top:36px;background:var(--bg1);border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.06);}
+.bench-table th{background:var(--bg2);font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.8px;text-transform:uppercase;padding:14px 18px;text-align:left;}
+.bench-table td{padding:13px 18px;font-size:14px;border-bottom:1px solid rgba(255,255,255,.04);}
+.bench-table tr:last-child td{border-bottom:none;}
+.bench-table tr.highlight td{background:rgba(77,121,255,.06);color:var(--t1);}
+.bench-check{color:#1EC96A;font-weight:700;}
+.bench-cross{color:var(--t3);}
+
+/* ── LEGAL STRIP ── */
+.legal-strip{background:var(--bg2);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);padding:32px 24px;}
+.legal-strip-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.legal-item-title{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.8px;text-transform:uppercase;margin-bottom:6px;}
+.legal-item-txt{font-size:13px;color:var(--t3);line-height:1.6;}
+
+/* ── FOOTER ── */
+footer{background:var(--bg1);border-top:1px solid rgba(255,255,255,.05);padding:40px 24px 32px;}
+.footer-inner{max-width:var(--max);margin:0 auto;}
+.footer-top{display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;margin-bottom:32px;}
+.footer-brand{}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.footer-logo-ic{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:15px;}
+.footer-logo-txt{font-size:18px;font-weight:800;color:var(--t1);}
+.footer-logo-txt span{color:var(--blue);}
+.footer-tagline{font-size:13px;color:var(--t3);max-width:240px;line-height:1.55;}
+.footer-links h4{font-size:12px;font-weight:700;color:var(--t3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;}
+.footer-links ul{list-style:none;}
+.footer-links ul li{margin-bottom:8px;}
+.footer-links ul li a{color:var(--t2);text-decoration:none;font-size:14px;transition:color .2s;}
+.footer-links ul li a:hover{color:var(--t1);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:20px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:13px;color:var(--t3);}
+.footer-legal{font-size:12px;color:var(--t3);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .nav-mobile-btn{display:block;}
+  section{padding:56px 18px;}
+  .install-box{padding:24px;}
+  .bench-table{font-size:12px;}
+  .bench-table th,.bench-table td{padding:10px 12px;}
+}
+
+/* ── UTILS ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(77,121,255,.2),transparent);margin:0;}
+.mt8{margin-top:8px;}.mt16{margin-top:16px;}.mt24{margin-top:24px;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-ic">📊</div>
+      <span class="nav-logo-txt">PyME<span>data</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Funcionalidades</a>
+      <a href="#como-funciona" class="nav-link">Cómo funciona</a>
+      <a href="#planes" class="nav-link">Planes</a>
+      <a href="#instalar" class="nav-link">Instalar app</a>
+      <a href="app.html" class="nav-cta">Acceder al Tablero →</a>
+    </div>
+    <button class="nav-mobile-btn" onclick="document.getElementById('mob-menu').style.display=document.getElementById('mob-menu').style.display==='flex'?'none':'flex'">☰</button>
+  </div>
+  <div id="mob-menu" style="display:none;flex-direction:column;gap:4px;padding:12px 24px 16px;border-top:1px solid rgba(255,255,255,.05)">
+    <a href="#features" class="nav-link" onclick="document.getElementById('mob-menu').style.display='none'">Funcionalidades</a>
+    <a href="#como-funciona" class="nav-link" onclick="document.getElementById('mob-menu').style.display='none'">Cómo funciona</a>
+    <a href="#planes" class="nav-link" onclick="document.getElementById('mob-menu').style.display='none'">Planes</a>
+    <a href="#instalar" class="nav-link" onclick="document.getElementById('mob-menu').style.display='none'">Instalar app</a>
+    <a href="app.html" class="nav-cta" style="margin-top:4px;text-align:center">Acceder al Tablero →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Datos verificados · INDEC · BCRA · REM-BCRA
+    </div>
+    <h1 class="hero-title">
+      Inteligencia económica<br>para tu <span>PyME</span>
+    </h1>
+    <p class="hero-sub">
+      Diagnóstico personalizado, simulador de margen, escenarios macro y plan de acción concreto — todo con IA y datos 100% verificables. Diseñado para empresarios PyMEs de La Plata.
+    </p>
+    <div class="hero-btns">
+      <a href="app.html" class="btn-hero-pri">📊 Acceder al Tablero</a>
+      <a href="#planes" class="btn-hero-sec">Ver planes →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">IPC Mar/26: <b>3.4% mensual</b></div>
+      <div class="hero-stat">TC: <b>$1.429/USD</b></div>
+      <div class="hero-stat">TAMAR: <b>30.9% TNA</b></div>
+      <div class="hero-stat">PIB 2026: <b>+3.4%</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner">
+    <div class="ticker-dot"></div>
+    <span>Datos en tiempo real: IPC Marzo 2026: <b>3.4% mensual · 32.6% i.a.</b> &nbsp;·&nbsp; TC Mayorista: <b>$1.429/USD</b> (BCRA) &nbsp;·&nbsp; TAMAR: <b>30.9% TNA</b> &nbsp;·&nbsp; PIB proyectado 2026: <b>+3.4%</b> (REM-BCRA) &nbsp;·&nbsp; IPC Acum. 2026: <b>9.4%</b></span>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-label">Funcionalidades</div>
+    <h2 class="section-title">Todo lo que necesitás para<br>tomar mejores decisiones</h2>
+    <p class="section-sub">PyMEdata integra contexto macroeconómico verificado, análisis por IA y herramientas de simulación en una sola plataforma diseñada para el empresario PyME platense.</p>
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-ic" style="background:rgba(239,79,79,.12);border:1px solid rgba(239,79,79,.25)">📈</div>
+        <div class="feat-title">Pulso Macroeconómico</div>
+        <div class="feat-desc">6 indicadores clave actualizados con cada publicación oficial. Gráficos de evolución IPC, TC y tasas de los últimos 12 meses. Proyecciones verificadas para diciembre 2026.</div>
+        <div class="feat-tags">
+          <span class="feat-tag" style="background:rgba(239,79,79,.12);border:1px solid rgba(239,79,79,.25);color:#EF4F4F">INDEC</span>
+          <span class="feat-tag" style="background:rgba(39,195,240,.12);border:1px solid rgba(39,195,240,.25);color:#27C3F0">BCRA</span>
+          <span class="feat-tag" style="background:rgba(139,111,240,.12);border:1px solid rgba(139,111,240,.25);color:#8B6FF0">REM-BCRA</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-ic" style="background:rgba(77,121,255,.12);border:1px solid rgba(77,121,255,.25)">🤖</div>
+        <div class="feat-title">Diagnóstico IA Personalizado</div>
+        <div class="feat-desc">Análisis específico para tu sector y tamaño. Identifica los canales de transmisión activos (Precio, Crédito, Demanda, Cambiario) y su impacto real en tu empresa.</div>
+        <div class="feat-tags">
+          <span class="feat-tag" style="background:rgba(77,121,255,.12);border:1px solid rgba(77,121,255,.25);color:#4D79FF">12 sectores</span>
+          <span class="feat-tag" style="background:rgba(77,121,255,.12);border:1px solid rgba(77,121,255,.25);color:#4D79FF">Framework FCE-UNLP</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-ic" style="background:rgba(30,201,106,.12);border:1px solid rgba(30,201,106,.25)">💹</div>
+        <div class="feat-title">Simulador de Margen</div>
+        <div class="feat-desc">Calculá en tiempo real cómo la inflación erosiona tu margen. Ajustá costo, markup, inflación esperada y horizonte temporal con sliders interactivos. Sin necesidad de IA.</div>
+        <div class="feat-tags">
+          <span class="feat-tag" style="background:rgba(30,201,106,.12);border:1px solid rgba(30,201,106,.25);color:#1EC96A">Offline</span>
+          <span class="feat-tag" style="background:rgba(30,201,106,.12);border:1px solid rgba(30,201,106,.25);color:#1EC96A">Tiempo real</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-ic" style="background:rgba(221,169,59,.12);border:1px solid rgba(221,169,59,.25)">🎯</div>
+        <div class="feat-title">Plan de Acción Concreto</div>
+        <div class="feat-desc">Acciones inmediatas (0–30 días) y de mediano plazo con instrumentos reales disponibles: SGR, SEPyME, BCRA PyMEs, Banco Provincia, FEBA y más.</div>
+        <div class="feat-tags">
+          <span class="feat-tag" style="background:rgba(221,169,59,.12);border:1px solid rgba(221,169,59,.25);color:#DDA93B">Instrumentos reales</span>
+          <span class="feat-tag" style="background:rgba(221,169,59,.12);border:1px solid rgba(221,169,59,.25);color:#DDA93B">Verificables</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-ic" style="background:rgba(139,111,240,.12);border:1px solid rgba(139,111,240,.25)">🔮</div>
+        <div class="feat-title">Simulador de Escenarios</div>
+        <div class="feat-desc">Analizá el impacto de tres escenarios macro (Base, Optimista, Adverso) sobre tu empresa específica, con magnitudes concretas y acciones recomendadas por IA.</div>
+        <div class="feat-tags">
+          <span class="feat-tag" style="background:rgba(139,111,240,.12);border:1px solid rgba(139,111,240,.25);color:#8B6FF0">Base</span>
+          <span class="feat-tag" style="background:rgba(139,111,240,.12);border:1px solid rgba(139,111,240,.25);color:#8B6FF0">Optimista</span>
+          <span class="feat-tag" style="background:rgba(139,111,240,.12);border:1px solid rgba(139,111,240,.25);color:#8B6FF0">Adverso</span>
+        </div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-ic" style="background:rgba(239,79,79,.12);border:1px solid rgba(239,79,79,.25)">🔔</div>
+        <div class="feat-title">Monitor y Vencimientos</div>
+        <div class="feat-desc">Alertas de coyuntura adaptadas a tu perfil, calendario de vencimientos fiscales (ARBA, AFIP, IIBB), KPIs clave y fuentes de verificación directas.</div>
+        <div class="feat-tags">
+          <span class="feat-tag" style="background:rgba(239,79,79,.12);border:1px solid rgba(239,79,79,.25);color:#EF4F4F">ARBA</span>
+          <span class="feat-tag" style="background:rgba(239,79,79,.12);border:1px solid rgba(239,79,79,.25);color:#EF4F4F">AFIP</span>
+          <span class="feat-tag" style="background:rgba(239,79,79,.12);border:1px solid rgba(239,79,79,.25);color:#EF4F4F">Alertas</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section id="como-funciona">
+  <div class="section-inner">
+    <div class="section-label">Cómo funciona</div>
+    <h2 class="section-title">Del contexto macro a la<br>decisión en 4 pasos</h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">1</div>
+        <div class="how-title">Configurá tu perfil</div>
+        <div class="how-desc">Seleccioná sector, tamaño y características de tu empresa. Describí tu problema principal en una línea.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">2</div>
+        <div class="how-title">Revisá el contexto macro</div>
+        <div class="how-desc">Accedé a los 6 indicadores clave verificados, los gráficos de evolución y las proyecciones para dic/26.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">3</div>
+        <div class="how-title">Generá tu diagnóstico IA</div>
+        <div class="how-desc">La IA analiza tu perfil contra el contexto macro y entrega un diagnóstico con canales activos, riesgos y oportunidades.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">4</div>
+        <div class="how-title">Ejecutá el plan de acción</div>
+        <div class="how-desc">Recibís acciones inmediatas y de mediano plazo con instrumentos reales disponibles en Argentina hoy.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- BENCHMARK -->
+<section style="background:var(--bg1);padding:72px 24px;">
+  <div class="section-inner">
+    <div class="section-label">Propuesta de valor</div>
+    <h2 class="section-title">¿Por qué PyMEdata?</h2>
+    <p class="section-sub">Comparado con las alternativas disponibles en el mercado, PyMEdata ofrece la mayor relación valor/precio para el contexto argentino.</p>
+    <div style="overflow-x:auto;margin-top:36px;">
+      <table class="bench-table">
+        <thead>
+          <tr>
+            <th>Herramienta</th>
+            <th>Precio</th>
+            <th>Contexto argentino</th>
+            <th>IA económica</th>
+            <th>Simuladores</th>
+            <th>Instrumentos PyME</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Power BI Pro</td>
+            <td style="font-family:'JetBrains Mono',monospace;color:var(--t2)">USD 10/mes</td>
+            <td><span class="bench-cross">✗</span></td>
+            <td><span class="bench-cross">✗</span></td>
+            <td><span class="bench-cross">✗</span></td>
+            <td><span class="bench-cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Zoho Analytics</td>
+            <td style="font-family:'JetBrains Mono',monospace;color:var(--t2)">USD 24/mes</td>
+            <td><span class="bench-cross">✗</span></td>
+            <td><span class="bench-cross">✗</span></td>
+            <td><span class="bench-cross">✗</span></td>
+            <td><span class="bench-cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>Consultoría económica (1 hora)</td>
+            <td style="font-family:'JetBrains Mono',monospace;color:var(--t2)">USD 50–100</td>
+            <td><span class="bench-check">✓</span></td>
+            <td><span class="bench-check">✓</span></td>
+            <td><span class="bench-cross">✗</span></td>
+            <td><span class="bench-check">✓</span></td>
+          </tr>
+          <tr class="highlight">
+            <td style="font-weight:700;color:var(--blue)">PyMEdata — Plan Pro</td>
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--blue)">USD 19/mes</td>
+            <td><span class="bench-check">✓</span></td>
+            <td><span class="bench-check">✓</span></td>
+            <td><span class="bench-check">✓</span></td>
+            <td><span class="bench-check">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:10px;">Fuentes: Microsoft (Power BI), Zoho, CPCE CABA (honorarios mínimos sugeridos abril 2026: módulo $13.683). TC referencia: $1.400/USD (BCRA, mayo 2026).</p>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- PLANES -->
+<section id="planes">
+  <div class="section-inner">
+    <div class="section-label">Precios</div>
+    <h2 class="section-title">Elegí el plan para tu empresa</h2>
+    <p class="section-sub">Precios en dólares, equivalente en pesos calculado a TC $1.400/USD (BCRA, mayo 2026). Actualizamos el equivalente en ARS mensualmente.</p>
+    <div class="plans-grid">
+
+      <div class="plan-card">
+        <div class="plan-name" style="color:var(--t2)">Starter</div>
+        <div class="plan-price" style="color:var(--t2)">Gratis</div>
+        <div class="plan-period">Sin cargo · Sin tarjeta</div>
+        <ul class="plan-feats">
+          <li class="y"><span class="ck" style="color:#1EC96A">✓</span> Dashboard macro completo (INDEC · BCRA · REM)</li>
+          <li class="y"><span class="ck" style="color:#1EC96A">✓</span> Gráficos de evolución 12 meses</li>
+          <li class="y"><span class="ck" style="color:#1EC96A">✓</span> Monitor de alertas y vencimientos ARBA/AFIP</li>
+          <li class="y"><span class="ck" style="color:#1EC96A">✓</span> Simulador de margen (offline)</li>
+          <li><span class="ck" style="color:var(--t3)">✗</span> Diagnóstico IA personalizado</li>
+          <li><span class="ck" style="color:var(--t3)">✗</span> Plan de acción con IA</li>
+          <li><span class="ck" style="color:var(--t3)">✗</span> Análisis de escenarios macro</li>
+        </ul>
+        <a href="app.html" class="plan-btn plan-btn-ghost">Empezar gratis</a>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge" style="background:rgba(77,121,255,.2);border:1px solid rgba(77,121,255,.5);color:#4D79FF">MÁS ELEGIDO</div>
+        <div class="plan-name" style="color:#4D79FF">Pro</div>
+        <div class="plan-price" style="color:#4D79FF">USD 19</div>
+        <div class="plan-ars">≈ $26.600 ARS / mes</div>
+        <div class="plan-period">por mes · menos que 20 min de consultoría</div>
+        <ul class="plan-feats">
+          <li class="y"><span class="ck" style="color:#4D79FF">✓</span> Todo lo de Starter</li>
+          <li class="y"><span class="ck" style="color:#4D79FF">✓</span> Diagnóstico IA — hasta 15/mes</li>
+          <li class="y"><span class="ck" style="color:#4D79FF">✓</span> Plan de acción con instrumentos reales</li>
+          <li class="y"><span class="ck" style="color:#4D79FF">✓</span> Análisis de escenarios macro</li>
+          <li class="y"><span class="ck" style="color:#4D79FF">✓</span> Comparador sectorial</li>
+          <li class="y"><span class="ck" style="color:#4D79FF">✓</span> 10 consultas libres al asesor IA</li>
+          <li><span class="ck" style="color:var(--t3)">✗</span> Consultas IA ilimitadas</li>
+        </ul>
+        <a href="app.html" class="plan-btn plan-btn-blue">Suscribirme al Plan Pro</a>
+      </div>
+
+      <div class="plan-card gold">
+        <div class="plan-badge" style="background:rgba(221,169,59,.2);border:1px solid rgba(221,169,59,.5);color:#DDA93B">ILIMITADO</div>
+        <div class="plan-name" style="color:#DDA93B">Premium</div>
+        <div class="plan-price" style="color:#DDA93B">USD 49</div>
+        <div class="plan-ars">≈ $68.600 ARS / mes</div>
+        <div class="plan-period">por mes · acceso total sin límites</div>
+        <ul class="plan-feats">
+          <li class="y"><span class="ck" style="color:#DDA93B">✓</span> Todo lo de Pro</li>
+          <li class="y"><span class="ck" style="color:#DDA93B">✓</span> Diagnóstico y Plan IA ilimitados</li>
+          <li class="y"><span class="ck" style="color:#DDA93B">✓</span> Consultas al asesor IA ilimitadas</li>
+          <li class="y"><span class="ck" style="color:#DDA93B">✓</span> Reportes exportables PDF</li>
+          <li class="y"><span class="ck" style="color:#DDA93B">✓</span> Acceso anticipado a nuevas funciones</li>
+          <li class="y"><span class="ck" style="color:#DDA93B">✓</span> Soporte WhatsApp &lt; 24 h</li>
+          <li class="y"><span class="ck" style="color:#DDA93B">✓</span> API Key propia (sin límites adicionales)</li>
+        </ul>
+        <a href="app.html" class="plan-btn plan-btn-gold">Suscribirme al Plan Premium</a>
+      </div>
+
+      <div class="plan-card purple">
+        <div class="plan-badge" style="background:rgba(139,111,240,.2);border:1px solid rgba(139,111,240,.5);color:#8B6FF0">MULTI-CLIENTE</div>
+        <div class="plan-name" style="color:#8B6FF0">Contador / Asesor</div>
+        <div class="plan-price" style="color:#8B6FF0">USD 89</div>
+        <div class="plan-ars">≈ $124.600 ARS / mes</div>
+        <div class="plan-period">por mes · hasta 20 empresas simultáneas</div>
+        <ul class="plan-feats">
+          <li class="y"><span class="ck" style="color:#8B6FF0">✓</span> Todo lo de Premium</li>
+          <li class="y"><span class="ck" style="color:#8B6FF0">✓</span> Hasta 20 perfiles de empresa</li>
+          <li class="y"><span class="ck" style="color:#8B6FF0">✓</span> Dashboard comparativo multi-empresa</li>
+          <li class="y"><span class="ck" style="color:#8B6FF0">✓</span> Reportes PDF con membrete propio</li>
+          <li class="y"><span class="ck" style="color:#8B6FF0">✓</span> Factura a nombre del estudio</li>
+          <li class="y"><span class="ck" style="color:#8B6FF0">✓</span> Soporte telefónico dedicado</li>
+        </ul>
+        <a href="app.html" class="plan-btn plan-btn-purple">Suscribirme — Contador</a>
+      </div>
+
+    </div>
+    <div style="background:var(--bg2);border:1px solid rgba(77,121,255,.15);border-radius:var(--r);padding:20px 24px;margin-top:20px;">
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:6px">💡 Opción avanzada: usá tu propia API Key de Anthropic</div>
+      <div style="font-size:13px;color:var(--t3);line-height:1.6;">Con cualquier plan podés conectar tu API Key propia de Anthropic en la sección Perfil. El uso de IA se factura a tu cuenta directamente (~USD 0.003 por análisis). Fernando Toledo no consume ningún token de su cuota. Los planes cubren acceso a la plataforma, datos macro y actualizaciones del framework.</div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- INSTALAR APP -->
+<section id="instalar" style="background:var(--bg1);padding:72px 24px;">
+  <div class="section-inner">
+    <div class="section-label">App móvil</div>
+    <h2 class="section-title">Instalala en tu celular<br>en 30 segundos</h2>
+    <p class="section-sub">PyMEdata es una Progressive Web App (PWA). No necesitás ir al App Store ni Play Store. Funciona como una app nativa en iOS y Android.</p>
+    <div class="install-box">
+      <div class="install-text">
+        <div style="font-size:48px;margin-bottom:16px;">📱</div>
+        <h3 style="font-size:22px;font-weight:700;margin-bottom:10px;">Sin descargas. Sin App Store.</h3>
+        <p style="font-size:14px;color:var(--t2);line-height:1.65;margin-bottom:20px;">PyMEdata se instala directamente desde el navegador de tu celular. Una vez instalada, funciona como una app normal con ícono en tu pantalla de inicio.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <div style="background:rgba(30,201,106,.1);border:1px solid rgba(30,201,106,.25);border-radius:8px;padding:8px 14px;font-size:13px;color:#1EC96A;font-weight:600;">✓ iOS · Safari</div>
+          <div style="background:rgba(30,201,106,.1);border:1px solid rgba(30,201,106,.25);border-radius:8px;padding:8px 14px;font-size:13px;color:#1EC96A;font-weight:600;">✓ Android · Chrome</div>
+          <div style="background:rgba(30,201,106,.1);border:1px solid rgba(30,201,106,.25);border-radius:8px;padding:8px 14px;font-size:13px;color:#1EC96A;font-weight:600;">✓ PC · Cualquier navegador</div>
+        </div>
+      </div>
+      <div class="install-steps">
+        <h3 style="font-size:17px;font-weight:700;margin-bottom:20px;">Cómo instalar en tu celular</h3>
+        <div class="install-step">
+          <div class="install-step-num">1</div>
+          <div class="install-step-txt"><b>Abrí PyMEdata en tu navegador</b><br>Entrá a esta página desde Chrome (Android) o Safari (iPhone).</div>
+        </div>
+        <div class="install-step">
+          <div class="install-step-num">2</div>
+          <div class="install-step-txt"><b>Tocá el menú de compartir o los tres puntos</b><br>En Safari: ícono de compartir ⬆️. En Chrome: tres puntos ⋮ arriba a la derecha.</div>
+        </div>
+        <div class="install-step">
+          <div class="install-step-num">3</div>
+          <div class="install-step-txt"><b>Seleccioná "Agregar a pantalla de inicio"</b><br>Aparecerá el ícono de PyMEdata en tu pantalla como una app.</div>
+        </div>
+        <div class="install-step">
+          <div class="install-step-num">4</div>
+          <div class="install-step-txt"><b>Abrila y usala como app</b><br>Funciona en pantalla completa, sin barras del navegador. El Simulador de Margen funciona sin conexión.</div>
+        </div>
+        <a href="app.html" class="plan-btn plan-btn-blue" style="display:block;margin-top:8px;text-align:center">Abrir el Tablero →</a>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- LEGAL -->
+<div class="legal-strip">
+  <div class="legal-strip-inner">
+    <div>
+      <div class="legal-item-title">⚖️ Aviso Legal</div>
+      <div class="legal-item-txt">La información provista tiene carácter exclusivamente informativo y educativo. No constituye asesoramiento financiero, contable ni legal. Consultá siempre a un profesional habilitado.</div>
+    </div>
+    <div>
+      <div class="legal-item-title">🏛️ Autoría</div>
+      <div class="legal-item-txt">Marco analítico de Canales de Transmisión Macroeconómica para PyMEs. © 2026 Fernando Toledo · FCE-UNLP. Todos los derechos reservados.</div>
+    </div>
+    <div>
+      <div class="legal-item-title">📊 Datos verificados</div>
+      <div class="legal-item-txt">Todos los indicadores provienen de fuentes oficiales: INDEC, BCRA y REM-BCRA. Actualizados con cada publicación oficial.</div>
+    </div>
+    <div>
+      <div class="legal-item-title">🔒 Privacidad</div>
+      <div class="legal-item-txt">No almacenamos datos personales. El perfil empresarial se guarda solo en tu dispositivo. Sin cookies de seguimiento.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-ic">📊</div>
+          <span class="footer-logo-txt">PyME<span>data</span></span>
+        </div>
+        <div class="footer-tagline">Inteligencia económica para PyMEs de La Plata. Framework académico FCE-UNLP.</div>
+        <div style="margin-top:14px;font-size:12px;color:var(--t3);">Fernando Toledo · FCE-UNLP<br>La Plata, Provincia de Buenos Aires</div>
+      </div>
+      <div class="footer-links">
+        <h4>Plataforma</h4>
+        <ul>
+          <li><a href="app.html">Acceder al Tablero</a></li>
+          <li><a href="#features">Funcionalidades</a></li>
+          <li><a href="#planes">Planes y Tarifas</a></li>
+          <li><a href="#instalar">Instalar app (PWA)</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Contexto Macro</h4>
+        <ul>
+          <li><a href="https://www.indec.gob.ar" target="_blank" rel="noopener">INDEC — Inflación y actividad</a></li>
+          <li><a href="https://www.bcra.gob.ar" target="_blank" rel="noopener">BCRA — Tipo de cambio y tasas</a></li>
+          <li><a href="https://www.arba.gob.ar" target="_blank" rel="noopener">ARBA — Ingresos Brutos PBA</a></li>
+          <li><a href="https://www.afip.gob.ar" target="_blank" rel="noopener">AFIP — Obligaciones fiscales</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="app.html#legal">Aviso Legal</a></li>
+          <li><a href="app.html#legal">Política de Privacidad</a></li>
+          <li><a href="app.html#legal">Propiedad Intelectual</a></li>
+          <li><a href="app.html#legal">Uso de IA</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 PyMEdata · Fernando Toledo · FCE-UNLP · La Plata, Argentina</div>
+      <div class="footer-legal">Versión 1.0 · Mayo 2026 · Desarrollado sobre Claude (Anthropic)</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js')
+      .then(r=>console.log('SW registrado'))
+      .catch(e=>console.log('SW error:',e));
+  });
+}
+</script>
+</body>
+</html>
