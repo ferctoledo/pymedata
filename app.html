@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="description" content="PyMEdata — Tablero de gestión económica para PyMEs de La Plata. Diagnóstico IA, simulador de margen, escenarios macro. Fernando Toledo · FCE-UNLP.">
 <meta name="theme-color" content="#05071A">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="PyMEdata">
 <title>PyMEdata — Tablero</title>
 <link rel="manifest" href="manifest.json">
@@ -26,18 +24,31 @@
 html,body{height:100%;overflow:hidden;background:var(--bg0);}
 body{font-family:'Outfit',sans-serif;color:var(--t1);font-size:14px;}
 ::-webkit-scrollbar{width:0;}
-#app{width:100%;max-width:430px;height:100vh;margin:0 auto;display:flex;flex-direction:column;background:var(--bg0);}
-.hdr{flex-shrink:0;background:linear-gradient(180deg,#101535,var(--bg0));border-bottom:1px solid var(--bd2);padding:11px 16px 10px;position:relative;}
-.hdr::after{content:'';position:absolute;bottom:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:.32;}
+#app{width:100%;max-width:430px;height:100vh;margin:0 auto;display:flex;flex-direction:column;}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--bg0);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:1000;}
+#splash .sp-logo{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:var(--gb);}
+#splash .sp-txt{font-size:24px;font-weight:800;}
+#splash .sp-txt span{color:var(--blue);}
+#splash .sp-ring{width:36px;height:36px;border:3px solid rgba(77,121,255,.2);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* HEADER */
+.hdr{flex-shrink:0;background:linear-gradient(180deg,#101535,var(--bg0));border-bottom:1px solid var(--bd2);padding:11px 15px 10px;position:relative;}
+.hdr::after{content:'';position:absolute;bottom:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:.3;}
 .hrow{display:flex;align-items:center;gap:9px;}
 .hlogo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:var(--gb);flex-shrink:0;}
-.htit{font-size:14px;font-weight:800;color:var(--t1);}
+.htit{font-size:14px;font-weight:800;}
 .htit span{color:var(--blue);}
-.hsub{font-size:8.5px;color:var(--t3);margin-top:1px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;}
+.hsub{font-size:8.5px;color:var(--t3);margin-top:1px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;}
 .hright{margin-left:auto;display:flex;gap:5px;align-items:center;}
 .hbtn{cursor:pointer;background:var(--bg2);border:1px solid var(--bd2);border-radius:8px;padding:5px 9px;font-size:11px;color:var(--t3);font-weight:600;transition:all .2s;white-space:nowrap;}
 .hbtn.on{border-color:rgba(77,121,255,.5);color:var(--blue);background:rgba(77,121,255,.12);}
-.hbadge{background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:4px 9px;font-size:11px;color:var(--t2);font-weight:600;}
+.hbadge{background:var(--bg2);border:1px solid var(--bd);border-radius:20px;padding:4px 9px;font-size:11px;font-weight:600;}
+.plan-chip{border-radius:5px;padding:2px 7px;font-size:9.5px;font-weight:700;}
+
+/* NAV */
 .scr{flex:1;overflow-y:auto;overflow-x:hidden;}
 .nav{flex-shrink:0;background:var(--bg1);border-top:1px solid var(--bd2);display:flex;padding:0 2px;position:relative;}
 .nav::before{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);opacity:.18;}
@@ -46,6 +57,8 @@ body{font-family:'Outfit',sans-serif;color:var(--t1);font-size:14px;}
 .nb.on::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:22px;height:2px;background:var(--blue);border-radius:0 0 3px 3px;}
 .nb-i{font-size:19px;line-height:1;}
 .nb-l{font-size:7.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;}
+
+/* LAYOUT */
 .pad{padding:13px 15px;}
 .stl{font-size:9.5px;font-weight:700;color:var(--t3);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .stl::after{content:'';flex:1;height:1px;background:var(--bd3);}
@@ -54,7 +67,6 @@ body{font-family:'Outfit',sans-serif;color:var(--t1);font-size:14px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd3);}
 .row:last-child{border-bottom:none;}
-.div{height:1px;background:var(--bd2);margin:11px 0;}
 .mc{border-radius:var(--r);padding:11px 12px;background:linear-gradient(135deg,var(--bg2),var(--bg1));box-shadow:var(--sh);}
 .mv{font-size:19px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;}
 .ml{font-size:8.5px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
@@ -72,9 +84,9 @@ body{font-family:'Outfit',sans-serif;color:var(--t1);font-size:14px;}
 .btn-b{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;box-shadow:var(--gb);}
 .btn-g{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#09090E;box-shadow:var(--gg);}
 .btn-o{background:transparent;color:var(--blue);border:1.5px solid rgba(77,121,255,.3)!important;}
+.btn-r{background:linear-gradient(135deg,#A01515,var(--red));color:#fff;}
 .btn-row{display:flex;gap:7px;}.btn-row .btn{flex:1;}
 .al{border-radius:var(--rs);padding:10px 12px;margin-bottom:7px;display:flex;gap:9px;}
-.al-t{font-size:11px;font-weight:700;margin-bottom:2px;}
 .al-d{font-size:11px;color:var(--t2);line-height:1.5;}
 .cc{border-radius:var(--r);padding:12px;margin-bottom:8px;border:1.5px solid transparent;}
 .cc-h{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
@@ -97,7 +109,6 @@ body{font-family:'Outfit',sans-serif;color:var(--t1);font-size:14px;}
 .aib{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:13px 14px;line-height:1.72;font-size:12.5px;color:var(--t2);white-space:pre-wrap;margin-bottom:10px;}
 .spw{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;gap:12px;}
 .sp{font-size:34px;animation:spin 1.7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
 .sp-t{font-size:12.5px;color:var(--t3);}
 .emp{text-align:center;padding:36px 20px;}
 .emp-i{font-size:44px;margin-bottom:12px;}
@@ -108,18 +119,6 @@ body{font-family:'Outfit',sans-serif;color:var(--t1);font-size:14px;}
 .rv b{color:var(--t1);}
 input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--bg3);outline:none;cursor:pointer;margin:3px 0 10px;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--blue);cursor:pointer;box-shadow:0 0 6px rgba(77,121,255,.5);}
-.plan{border-radius:16px;padding:16px;margin-bottom:12px;border:1.5px solid var(--bd2);background:var(--bg2);position:relative;overflow:hidden;}
-.plan.pro{border-color:rgba(77,121,255,.45);background:linear-gradient(135deg,rgba(77,121,255,.1),rgba(77,121,255,.04));}
-.plan.prem{border-color:rgba(221,169,59,.4);background:linear-gradient(135deg,rgba(221,169,59,.09),rgba(221,169,59,.03));}
-.plan.elite{border-color:rgba(139,111,240,.45);background:linear-gradient(135deg,rgba(139,111,240,.1),rgba(139,111,240,.04));}
-.plan-badge{position:absolute;top:13px;right:13px;font-size:8px;font-weight:800;border-radius:4px;padding:3px 8px;text-transform:uppercase;}
-.pln{font-size:17px;font-weight:800;margin-bottom:2px;}
-.plp{font-size:11px;color:var(--t3);margin-bottom:4px;}
-.plprice{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;}
-.plprice-usd{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums;}
-.plars{font-size:11px;color:var(--t2);margin-bottom:10px;font-family:'JetBrains Mono',monospace;}
-.plf{font-size:11px;color:var(--t2);margin-bottom:4px;display:flex;gap:6px;line-height:1.4;}
-.plf.y{color:var(--t1);}
 .notif{border-radius:var(--rs);padding:9px 11px;margin-bottom:6px;display:flex;gap:9px;align-items:center;background:var(--bg2);border:1px solid var(--bd2);}
 .ndot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 .leg{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
@@ -127,13 +126,27 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;heigh
 .sc-c.on{border-color:rgba(77,121,255,.42);background:rgba(77,121,255,.12);}
 .cbb{height:7px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-top:4px;}
 .cbf{height:100%;border-radius:4px;transition:width .5s;}
-.bench{border-radius:var(--rs);padding:9px 12px;margin-bottom:6px;background:var(--bg1);border:1px solid var(--bd2);}
-.bench-row{display:flex;justify-content:space-between;align-items:center;}
+/* LOCK overlay */
+.lock-overlay{position:absolute;inset:0;background:rgba(5,7,26,.85);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:10;backdrop-filter:blur(4px);}
+.lock-ico{font-size:28px;}
+.lock-txt{font-size:12px;color:var(--t2);text-align:center;max-width:200px;line-height:1.5;}
+.lock-btn{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;}
+/* USO BAR */
+.uso-bar{height:4px;border-radius:2px;background:var(--bg3);overflow:hidden;margin-top:4px;}
+.uso-fill{height:100%;border-radius:2px;transition:width .5s;}
 select option{background:var(--bg2);color:var(--t1);}
 </style>
 </head>
 <body>
-<div id="app">
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <div class="sp-logo">📊</div>
+  <div class="sp-txt">PyME<span>data</span></div>
+  <div class="sp-ring"></div>
+</div>
+
+<div id="app" style="display:none">
   <div class="hdr">
     <div class="hrow">
       <div class="hlogo">📊</div>
@@ -141,22 +154,31 @@ select option{background:var(--bg2);color:var(--t1);}
         <div class="htit" id="ht">PyME<span>data</span></div>
         <div class="hsub" id="hs">TABLERO · MAYO 2026</div>
       </div>
-      <div class="hright" id="hright">
-        <a href="index.html" class="hbtn" style="text-decoration:none">🏠 Inicio</a>
-      </div>
+      <div class="hright" id="hright"></div>
     </div>
   </div>
   <div class="scr" id="scr"></div>
   <nav class="nav" id="nav"></nav>
 </div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
 <script>
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+/* ══ ESTADO GLOBAL ══ */
+let USER = null;      // auth user
+let PROFILE = null;   // profile row
+let USO = null;       // uso_mensual row
+
 const TC=1400;
 const MAC=[{v:"3.4%",l:"IPC Mensual",m:"Mar 2026",f:"INDEC",t:"↓",c:"#EF4F4F"},{v:"32.6%",l:"IPC Interanual",m:"Mar 2026",f:"INDEC",t:"↓",c:"#F09730"},{v:"9.4%",l:"IPC Acum.",m:"Ene–Mar",f:"INDEC",t:"—",c:"#F09730"},{v:"$1.429",l:"TC Mayorista",m:"Mar 2026",f:"BCRA",t:"→",c:"#27C3F0"},{v:"30.9%",l:"Tasa TAMAR",m:"Mar 2026",f:"BCRA",t:"↓",c:"#8B6FF0"},{v:"+3.4%",l:"Proyec. PIB",m:"2026",f:"REM–BCRA",t:"↑",c:"#1EC96A"}];
 const SER={ipc:{lbl:["Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic","Ene","Feb","Mar"],d:[8.8,4.2,4.6,4.0,3.5,3.5,2.4,2.4,2.7,2.3,2.4,3.4],c:"#EF4F4F",u:"%"},tc:{lbl:["Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic","Ene","Feb","Mar"],d:[877,887,900,913,927,941,960,1000,1030,1320,1375,1429],c:"#27C3F0",u:"$/USD"},tamar:{lbl:["Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic","Ene","Feb","Mar"],d:[78,60,49,44,44,44,40,38,35,32,32,30.9],c:"#8B6FF0",u:"% TNA"}};
 const PROY=[{l:"TC esperado dic/26",v:"$1.707/USD",c:"#27C3F0",s:"REM-BCRA"},{l:"TAMAR esperada dic/26",v:"24.2% TNA",c:"#8B6FF0",s:"REM-BCRA"},{l:"Inflación i.a. dic/26",v:"~23%",c:"#F09730",s:"IERAL/REM"},{l:"PIB 2026",v:"+3.4%",c:"#1EC96A",s:"REM-BCRA"}];
 const COY=[{i:"📉",t:"Desinflación no lineal: mayorista ~0.8–1%/mes. Proceso con volatilidad.",n:"am"},{i:"💱",t:"Bandas cambiarias activas. Depreciación proyectada +19.4% hacia dic/26.",n:"am"},{i:"📈",t:"Actividad en recuperación. Salarios reales en alza gradual. PIB +3.4%.",n:"vd"},{i:"🏦",t:"Ventana crédito PyME: tasas en descenso (30.9% → 24.2% TNA a dic/26).",n:"am"},{i:"⚖️",t:"Superávit fiscal sostenido. IPC Abril/26 se publica el 14 de mayo.",n:"vd"}];
 const SEC=[{id:"comercio",l:"Comercio Minorista",e:"🛒"},{id:"gastro",l:"Gastronomía",e:"🍽️"},{id:"const",l:"Construcción",e:"🏗️"},{id:"indus",l:"Industria",e:"⚙️"},{id:"serv",l:"Servicios Prof.",e:"💼"},{id:"tech",l:"Tecnología",e:"💻"},{id:"agro",l:"Agro",e:"🌾"},{id:"salud",l:"Salud/Estética",e:"🏥"},{id:"educ",l:"Educación",e:"📚"},{id:"logis",l:"Logística",e:"🚛"},{id:"textil",l:"Textil",e:"👕"},{id:"otro",l:"Otro sector",e:"📦"}];
-const CAN=[{id:"precio",n:"Canal Precio",e:"📈",c:"#EF4F4F",bg:"rgba(239,79,79,.1)",bd:"rgba(239,79,79,.28)",de:"La inflación encarece tus costos más rápido que tus precios de venta. El margen queda bajo presión constante.",da:["IPC: 3.4%/mes","IPC i.a.: 32.6%","Mayorista: ~0.9%"]},{id:"credito",n:"Canal Crédito",e:"🏦",c:"#8B6FF0",bg:"rgba(139,111,240,.1)",bd:"rgba(139,111,240,.28)",de:"Las tasas altas encarecen el financiamiento del capital de trabajo.",da:["TAMAR: 30.9% TNA","Proyec. dic/26: 24.2%","SGR disponibles"]},{id:"demanda",n:"Canal Demanda",e:"🛍️",c:"#1EC96A",bg:"rgba(30,201,106,.1)",bd:"rgba(30,201,106,.28)",de:"El consumo privado se recupera gradualmente con los salarios reales en alza.",da:["PIB 2026: +3.4%","Salarios en alza","Confianza moderada"]},{id:"camb",n:"Canal Cambiario",e:"💱",c:"#27C3F0",bg:"rgba(39,195,240,.1)",bd:"rgba(39,195,240,.28)",de:"Depreciación esperada +19.4% hacia dic/26. Impacta insumos y competitividad.",da:["TC: $1.429/USD","Proyec.: $1.707","Banda activa"]}];
+const CAN=[{id:"precio",n:"Canal Precio",e:"📈",c:"#EF4F4F",bg:"rgba(239,79,79,.1)",bd:"rgba(239,79,79,.28)",de:"La inflación encarece tus costos más rápido que tus precios. Margen bajo presión constante.",da:["IPC: 3.4%/mes","IPC i.a.: 32.6%","Mayorista: ~0.9%"]},{id:"credito",n:"Canal Crédito",e:"🏦",c:"#8B6FF0",bg:"rgba(139,111,240,.1)",bd:"rgba(139,111,240,.28)",de:"Las tasas altas encarecen el financiamiento del capital de trabajo.",da:["TAMAR: 30.9% TNA","Proyec. dic/26: 24.2%","SGR disponibles"]},{id:"demanda",n:"Canal Demanda",e:"🛍️",c:"#1EC96A",bg:"rgba(30,201,106,.1)",bd:"rgba(30,201,106,.28)",de:"El consumo privado se recupera gradualmente con los salarios reales en alza.",da:["PIB 2026: +3.4%","Salarios en alza","Confianza moderada"]},{id:"camb",n:"Canal Cambiario",e:"💱",c:"#27C3F0",bg:"rgba(39,195,240,.1)",bd:"rgba(39,195,240,.28)",de:"Depreciación esperada +19.4% hacia dic/26. Impacta insumos y competitividad.",da:["TC: $1.429/USD","Proyec.: $1.707","Banda activa"]}];
 const SD={comercio:{r:85,o:60,m:35,e:70},gastro:{r:78,o:55,m:28,e:65},const:{r:72,o:80,m:42,e:55},indus:{r:68,o:75,m:45,e:60},serv:{r:45,o:70,m:65,e:40},tech:{r:30,o:90,m:72,e:25},agro:{r:55,o:85,m:50,e:50},salud:{r:40,o:65,m:58,e:35},educ:{r:42,o:60,m:55,e:30},logis:{r:70,o:65,m:32,e:68},textil:{r:75,o:50,m:30,e:72},otro:{r:60,o:60,m:45,e:55}};
 const VENC=[{d:"14 May",t:"Publicación IPC Abril 2026",c:"INDEC",u:"am"},{d:"15 May",t:"Vto. IIBB Quincenal — 1ª quincena",c:"ARBA",u:"red"},{d:"20 May",t:"Vto. Monotributo / Autónomos",c:"AFIP",u:"red"},{d:"22 May",t:"Vto. IVA mensual",c:"AFIP",u:"red"},{d:"28 May",t:"Vto. Ganancias — anticipos",c:"AFIP",u:"am"},{d:"30 May",t:"Vto. IIBB Quincenal — 2ª quincena",c:"ARBA",u:"red"},{d:"10 Jun",t:"Cargas Sociales — sueldos mayo",c:"AFIP",u:"am"},{d:"15 Jun",t:"Publicación IPC Mayo 2026",c:"INDEC",u:"am"}];
 const KPI=[{l:"Margen Bruto",d:"¿Tus precios suben más que tus costos?",i:"💹",c:"#1EC96A"},{l:"Días de Stock",d:"¿Cobertura ante suba de insumos?",i:"📦",c:"#27C3F0"},{l:"Posición de Caja",d:"¿Cuántos días de operación cubrís?",i:"💰",c:"#F09730"},{l:"Mora en Cobranza",d:"¿Tus clientes pagan en término?",i:"🕐",c:"#8B6FF0"},{l:"Ratio Costo/Precio",d:"¿Cuánto del precio son costos?",i:"📊",c:"#EF4F4F"}];
@@ -167,13 +189,122 @@ const tag=(t,c)=>`<span class="tag" style="background:${c}1E;border:1px solid ${
 const tagd=t=>`<span class="tagd">${t}</span>`;
 const fmt=n=>Math.round(n).toLocaleString("es-AR");
 
+/* ══ AUTH ══ */
+async function initAuth() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  USER = session.user;
+
+  // Cargar perfil
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', USER.id).single();
+  PROFILE = profile;
+
+  // Cargar uso del mes
+  const { data: uso } = await sb.from('uso_mensual')
+    .select('*').eq('user_id', USER.id)
+    .eq('mes', new Date().toISOString().slice(0,7) + '-01')
+    .single();
+  USO = uso || { diagnosticos:0, planes:0, consultas:0, escenarios:0 };
+
+  // Cargar perfil empresa si existe
+  const { data: ep } = await sb.from('empresa_perfiles')
+    .select('*').eq('user_id', USER.id).order('created_at',{ascending:false}).limit(1).single();
+  if (ep) {
+    Object.assign(S, {
+      sector: ep.sector||'', emp: ep.empleados||'1–5',
+      ex: ep.exporta, im: ep.importa, cr: ep.credito,
+      us: ep.insumos_usd, on: ep.venta_online, pr: ep.problema||'',
+      ok: !!ep.sector
+    });
+  }
+
+  // Ocultar splash, mostrar app
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  R();
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href = 'login.html';
+}
+
+/* ══ PLAN GATES ══ */
+function planColor(plan) {
+  return {starter:'#7A8FBA',pro:'#4D79FF',premium:'#DDA93B',contador:'#8B6FF0'}[plan]||'#7A8FBA';
+}
+function planNombre(plan) {
+  return {starter:'Starter',pro:'Pro',premium:'Premium',contador:'Contador'}[plan]||plan;
+}
+function puede(tipo) {
+  const plan = PROFILE?.plan || 'starter';
+  const uso = USO?.[tipo] || 0;
+  return puedeUsar(plan, tipo, uso);
+}
+function lockBox(tipo) {
+  const plan = PROFILE?.plan || 'starter';
+  const lims = {diagnosticos:'diagnósticos',planes:'planes de acción',consultas:'consultas IA',escenarios:'análisis de escenarios'};
+  return `<div class="lock-overlay">
+    <div class="lock-ico">🔒</div>
+    <div class="lock-txt">Funcionalidad del Plan Pro o superior.<br>Tu plan actual: <b>${planNombre(plan)}</b></div>
+    <button class="lock-btn" onclick="set({sc:'cuenta',stab:''})">Ver planes →</button>
+  </div>`;
+}
+function usoBar(tipo, label) {
+  const plan = PROFILE?.plan || 'starter';
+  const lim = PLAN_LIMITES[plan]?.[tipo] ?? 0;
+  const uso = USO?.[tipo] || 0;
+  if (lim === -1) return `<div style="font-size:10px;color:var(--green);margin-top:4px">∞ ${label} ilimitados</div>`;
+  if (lim === 0)  return `<div style="font-size:10px;color:var(--t3);margin-top:4px">${label}: solo Plan Pro+</div>`;
+  const pct = Math.min(100, (uso/lim)*100);
+  const c = pct >= 80 ? '#EF4F4F' : pct >= 50 ? '#F09730' : '#1EC96A';
+  return `<div style="font-size:10px;color:var(--t2);margin-top:4px">${label}: ${uso}/${lim} este mes</div>
+          <div class="uso-bar"><div class="uso-fill" style="width:${pct}%;background:${c}"></div></div>`;
+}
+
+/* ══ GUARDAR EN BD ══ */
+async function guardarPerfil() {
+  if (!USER) return;
+  await sb.from('empresa_perfiles').upsert({
+    user_id: USER.id, sector: S.sector, empleados: S.emp,
+    exporta: S.ex, importa: S.im, credito: S.cr,
+    insumos_usd: S.us, venta_online: S.on, problema: S.pr,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'user_id' });
+}
+
+async function guardarDiagnostico(tipo, resultado, escenario=null) {
+  if (!USER) return;
+  const se = SEC.find(x=>x.id===S.sector);
+  await sb.from('diagnosticos').insert({
+    user_id: USER.id, sector: se?.l||S.sector, empleados: S.emp,
+    resultado, tipo, escenario,
+    problema: S.pr,
+    caracteristicas: [S.ex&&'Exporta',S.im&&'Importa',S.cr&&'Crédito',S.us&&'USD',S.on&&'Online'].filter(Boolean).join(',')
+  });
+  await sb.rpc('incrementar_uso', { p_user_id: USER.id, p_tipo: tipo+'s' });
+  // Actualizar uso local
+  if (USO) USO[tipo+'s'] = (USO[tipo+'s']||0) + 1;
+}
+
+async function guardarConsulta(pregunta, respuesta) {
+  if (!USER) return;
+  const se = SEC.find(x=>x.id===S.sector);
+  await sb.from('consultas').insert({
+    user_id: USER.id, pregunta, respuesta, sector: se?.l||''
+  });
+  await sb.rpc('incrementar_uso', { p_user_id: USER.id, p_tipo: 'consultas' });
+  if (USO) USO.consultas = (USO.consultas||0) + 1;
+}
+
+/* ══ HELPERS UI ══ */
 function alC(n,i,ti,tx,sr){
   const c=n==="red"?"#EF4F4F":n==="am"?"#F09730":"#1EC96A";
   const bg=n==="red"?"rgba(239,79,79,.07)":n==="am"?"rgba(240,151,48,.07)":"rgba(30,201,106,.07)";
   const bd=n==="red"?"rgba(239,79,79,.2)":n==="am"?"rgba(240,151,48,.2)":"rgba(30,201,106,.2)";
-  return `<div class="al" style="background:${bg};border:1px solid ${bd}"><span style="font-size:16px;margin-top:1px;flex-shrink:0">${i}</span><div style="flex:1">${ti?`<div class="al-t" style="color:${c}">${ti}${sr?" "+tagd(sr):""}</div>`:""}<div class="al-d">${tx}</div></div></div>`;
+  return `<div class="al" style="background:${bg};border:1px solid ${bd}"><span style="font-size:16px;margin-top:1px;flex-shrink:0">${i}</span><div style="flex:1">${ti?`<div style="font-size:11px;font-weight:700;margin-bottom:2px;color:${c}">${ti}${sr?" "+tagd(sr):""}</div>`:""}<div class="al-d">${tx}</div></div></div>`;
 }
-
 function drawChart(id,data,color,labels){
   setTimeout(()=>{
     const cv=document.getElementById(id);if(!cv)return;
@@ -194,7 +325,6 @@ function drawChart(id,data,color,labels){
     [0,step,step*2,labels.length-1].forEach(i=>{if(labels[i]&&pts[i])ctx.fillText(labels[i],pts[i].x,H-1);});
   },60);
 }
-
 function calcSim(){
   const{costo,markup,infl,meses}=S.sim;
   const p0=costo*(1+markup/100),cF=costo*Math.pow(1+infl/100,meses);
@@ -202,6 +332,8 @@ function calcSim(){
   return{p0,cF,m0,mF,pN,adj:(pN-p0)/p0*100,loss:m0-mF};
 }
 
+/* ══ API IA ══ */
+const SYS=`Asesor económico PyMEs argentinas, La Plata, FCE-UNLP. Plataforma PyMEdata. Marco Fernando Toledo: Canal Precio(inflación→costos→márgenes), Canal Crédito(tasas→financiamiento), Canal Demanda(salarios→consumo), Canal Cambiario(TC→insumos). Datos: IPC mar/26:3.4%/mes·32.6% i.a. TC:$1.429→$1.707 dic/26. TAMAR:30.9%→24.2% TNA dic/26. PIB 2026:+3.4%. Español rioplatense. Concreto, accionable. **negrita** conceptos clave.`;
 async function callAI(u,s){
   try{
     const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:s,messages:[{role:"user",content:u}]})});
@@ -209,9 +341,8 @@ async function callAI(u,s){
     return d.content?.filter(b=>b.type==="text").map(b=>b.text).join("\n").trim()||"Sin respuesta.";
   }catch(e){return "Error de conexión. Verificá tu red e intentá de nuevo.";}
 }
-const SYS=`Asesor económico PyMEs argentinas, La Plata, FCE-UNLP. Plataforma PyMEdata. Marco Fernando Toledo: Canal Precio(inflación→costos→márgenes), Canal Crédito(tasas→financiamiento), Canal Demanda(salarios→consumo), Canal Cambiario(TC→insumos). Datos: IPC mar/26:3.4%/mes·32.6% i.a. TC:$1.429→$1.707 dic/26. TAMAR:30.9%→24.2% TNA dic/26. PIB 2026:+3.4%. Español rioplatense. Concreto, accionable. **negrita** conceptos clave.`;
-
 async function gDiag(){
+  if (!puede('diagnosticos')) { set({stab:'analisis'}); return; }
   const sl=SEC.find(x=>x.id===S.sector)?.l||S.sector;
   set({ld:true,sc:"diagnostico",stab:"analisis"});
   const c=[S.ex&&"Exporta",S.im&&"Importa insumos",S.cr&&"Tiene crédito",S.us&&"Insumos USD",S.on&&"Vende online"].filter(Boolean).join(", ")||"Solo mercado local";
@@ -224,9 +355,11 @@ async function gDiag(){
 1.[Con magnitud] 2.[Riesgo] 3.[Riesgo]
 **OPORTUNIDADES**
 1.[Accionable ahora] 2.[Oportunidad]`,SYS);
+  await guardarDiagnostico('diagnostico', t);
   set({diag:t,ld:false});
 }
 async function gSol(){
+  if (!puede('planes')) { set({sc:'soluciones',stab:'plan'}); return; }
   const sl=SEC.find(x=>x.id===S.sector)?.l||S.sector;
   set({ld:true,sc:"soluciones",stab:"plan"});
   const t=await callAI(`Sector:${sl}|Empleados:${S.emp}${S.pr?`|Problema:"${S.pr}"`:""}
@@ -238,32 +371,39 @@ async function gSol(){
 [3–4 reales: SGR, SEPyME, BCRA PyMEs, Banco Provincia, FEBA]
 **KPIs A MONITOREAR**
 [3 indicadores clave mensuales]`,SYS);
+  await guardarDiagnostico('plan', t);
   set({sol:t,ld:false});
 }
 async function gQ(){
-  if(!S.q.trim())return;
+  if (!S.q.trim()) return;
+  if (!puede('consultas')) { R(); return; }
   const sl=SEC.find(x=>x.id===S.sector)?.l||"PyME";
   set({lq:true,qr:""});
   const t=await callAI(S.q,SYS+` Sector:${sl}. Máx 200 palabras.`);
+  await guardarConsulta(S.q, t);
   set({qr:t,lq:false,hist:[...S.hist,{q:S.q,ts:new Date().toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"})}].slice(-8)});
 }
 async function gScen(){
+  if (!puede('escenarios')) { R(); return; }
   const sl=SEC.find(x=>x.id===S.sector)?.l||"PyME general";
   const txt={base:"Escenario base: desinflación gradual, TC en banda, tasas bajando.",accel:"Escenario optimista: inflación 1.5%/mes, TC estable, crédito abierto.",shock:"Escenario adverso: salto cambiario +40%, inflación rebota 6%/mes."};
   set({ld:true});
   const t=await callAI(`Sector:${sl}|${txt[S.scen]} Impacto concreto, riesgos y 3 acciones urgentes. Con magnitudes.`,SYS);
+  await guardarDiagnostico('escenario', t, S.scen);
   set({sol:t,ld:false,sc:"soluciones",stab:"plan"});
 }
 
+/* ══ PANTALLAS ══ */
 function pgInicio(){
   const d=new Date().toLocaleDateString("es-AR",{day:"2-digit",month:"short",year:"numeric"});
   const sr=SER[S.cs];const last=sr.d[sr.d.length-1],prev=sr.d[sr.d.length-2];
   const chg=((last-prev)/prev*100).toFixed(1);
+  const nombre = PROFILE?.nombre ? `, ${PROFILE.nombre.split(' ')[0]}` : '';
   return `<div class="hero">
   <div class="hero-top"><div class="hero-ic">📊</div>
     <div>
-      <div style="font-weight:900;font-size:17px;letter-spacing:-.3px">Tablero PyMEs La Plata</div>
-      <div style="font-size:11px;color:var(--t3);margin-top:2px">Prov. de Buenos Aires &nbsp;·&nbsp; ${d}</div>
+      <div style="font-weight:900;font-size:17px;letter-spacing:-.3px">Bienvenido${nombre} 👋</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:2px">${PROFILE?.empresa||'Tu PyME'} &nbsp;·&nbsp; ${d}</div>
     </div>
   </div>
   <div class="ticker"><div class="dot"></div><span>IPC Mar/26: <b>3.4% mensual · 32.6% i.a.</b> &nbsp;·&nbsp; TC: <b>$1.429/USD</b> &nbsp;·&nbsp; TAMAR: <b>30.9% TNA</b></span></div>
@@ -288,7 +428,7 @@ function pgInicio(){
 
 function pgPerfil(){
   return `<div class="pad">
-<div style="margin-bottom:15px"><div style="font-weight:800;font-size:18px;margin-bottom:3px">Mi Empresa</div><div style="font-size:12px;color:var(--t3)">Configurá tu perfil para personalizar diagnóstico y recomendaciones</div></div>
+<div style="margin-bottom:15px"><div style="font-weight:800;font-size:18px;margin-bottom:3px">Mi Empresa</div><div style="font-size:12px;color:var(--t3)">Configurá el perfil para personalizar diagnóstico y recomendaciones</div></div>
 <div class="lbl">Sector principal</div>
 <div class="sgr">${SEC.map(x=>`<div class="sb ${S.sector===x.id?"on":""}" onclick="set({sector:'${x.id}'})"><div class="sb-i">${x.e}</div><div class="sb-l">${x.l}</div></div>`).join("")}</div>
 <div class="lbl">Cantidad de empleados</div>
@@ -297,7 +437,7 @@ function pgPerfil(){
 <div style="margin-bottom:13px">${[["ex","✈️ Exporta"],["im","🚢 Importa"],["cr","🏦 Crédito"],["us","💵 USD"],["on","🌐 Online"]].map(([k,l])=>`<span class="tg ${S[k]?"on":""}" onclick="set({${k}:${!S[k]}})">${l}</span>`).join("")}</div>
 <div class="lbl">Problema principal</div>
 <textarea class="inp" id="pr" style="height:78px;margin-bottom:16px" placeholder="Ej: Los costos subieron más que mis precios y no puedo trasladarlos sin perder clientes...">${S.pr}</textarea>
-<button class="btn btn-b" style="opacity:${S.sector?1:.35}" onclick="if(S.sector){const v=document.getElementById('pr')?.value||S.pr;set({pr:v,ok:true,diag:null,sol:null,sc:'inicio',stab:''})}">✅&nbsp; Guardar perfil</button>
+<button class="btn btn-b" style="opacity:${S.sector?1:.35}" onclick="if(S.sector){const v=document.getElementById('pr')?.value||S.pr;set({pr:v,ok:true,diag:null,sol:null,sc:'inicio',stab:''});guardarPerfil()}">✅&nbsp; Guardar perfil</button>
 </div>`;
 }
 
@@ -311,10 +451,16 @@ function pgDiag(){
     ${CAN.map(cn=>{const act=cn.id==="precio"||(cn.id==="credito"&&S.cr)||((cn.id==="camb")&&(S.im||S.ex||S.us))||cn.id==="demanda";const int=cn.id==="precio"?"ALTA":(cn.id==="credito"&&S.cr)?"ALTA":((cn.id==="camb")&&(S.im||S.us))?"ALTA":"MEDIA";const ic=int==="ALTA"?"#EF4F4F":"#F09730";return `<div class="cc" style="background:${act?cn.bg:"var(--bg1)"};border-color:${act?cn.bd:"var(--bd2)"};opacity:${act?1:.38}"><div class="cc-h"><div class="cc-ic" style="background:${cn.c}1C;border:1px solid ${cn.c}32">${cn.e}</div><div><div style="font-weight:700;font-size:13px;color:${act?cn.c:"var(--t1)"}">${cn.n}</div><div style="display:flex;gap:4px;margin-top:3px">${tag("Impacto: "+int,ic)}${act?tag("ACTIVO",cn.c):""}</div></div></div><div style="font-size:11.5px;color:var(--t2);line-height:1.6;margin-bottom:8px">${cn.de}</div><div style="display:flex;flex-wrap:wrap;gap:4px">${cn.da.map(d=>tag(d,cn.c)).join("")}</div></div>`;}).join("")}
     <button class="btn btn-b" style="margin-top:4px" onclick="set({stab:'analisis'});if(!S.diag)gDiag()">🤖&nbsp; Generar Análisis IA</button>`;
   }else if(S.stab==="analisis"){
-    b=S.ld?`<div class="spw"><div class="sp">⚙️</div><div class="sp-t">Analizando con IA...</div></div>`:S.diag?`<div class="aib">${S.diag}</div><div class="btn-row"><button class="btn btn-o" onclick="set({diag:null});gDiag()">🔄 Regenerar</button><button class="btn btn-g" onclick="gSol()">Soluciones →</button></div>`:`<div class="emp"><div class="emp-i">🤖</div><div class="emp-t">Generá un diagnóstico personalizado con IA</div>${S.ok?`<button class="btn btn-b" onclick="gDiag()">Generar Diagnóstico</button>`:`<button class="btn btn-o" onclick="set({sc:'perfil',stab:''})">Completar perfil primero</button>`}</div>`;
+    const bloqueado = !puede('diagnosticos');
+    b = S.ld ? `<div class="spw"><div class="sp">⚙️</div><div class="sp-t">Analizando con IA...</div></div>`
+      : bloqueado ? `<div style="position:relative;min-height:200px">${lockBox('diagnosticos')}</div>${usoBar('diagnosticos','Diagnósticos')}`
+      : S.diag ? `<div class="aib">${S.diag}</div>${usoBar('diagnosticos','Diagnósticos')}<div class="btn-row"><button class="btn btn-o" onclick="set({diag:null});gDiag()">🔄 Regenerar</button><button class="btn btn-g" onclick="gSol()">Soluciones →</button></div>`
+      : `<div class="emp"><div class="emp-i">🤖</div><div class="emp-t">Generá un diagnóstico personalizado con IA</div>${S.ok?`<button class="btn btn-b" onclick="gDiag()">Generar Diagnóstico</button>${usoBar('diagnosticos','Diagnósticos')}`:`<button class="btn btn-o" onclick="set({sc:'perfil',stab:''})">Completar perfil primero</button>`}</div>`;
   }else if(S.stab==="consulta"){
+    const bloq = !puede('consultas');
     const FAQ=["¿Cómo protejo mi margen con la inflación?","¿Qué líneas de crédito PyME hay disponibles?","¿Cómo impacta el tipo de cambio en mis costos?","¿Cómo fijar precios en este contexto?","¿Qué beneficios impositivos puedo aprovechar?"];
-    b=`<div class="lbl">Consultá al Asesor IA</div><textarea class="inp" id="qi" style="height:88px;margin-bottom:9px" placeholder="Ej: ¿Cómo dolarizo precios? ¿Qué crédito conviene?">${S.q}</textarea><button class="btn btn-b" style="margin-bottom:12px;opacity:${S.q.trim()&&!S.lq?1:.35}" onclick="const v=document.getElementById('qi')?.value||S.q;set({q:v});gQ()">${S.lq?"⚙️ Procesando...":"🔍&nbsp; Consultar"}</button>${S.lq?`<div style="text-align:center;padding:8px;color:var(--t3);font-size:12px">Procesando...</div>`:""}${S.qr?`<div class="aib">${S.qr}</div>`:""}${!S.qr&&!S.lq&&S.hist.length?`<div class="stl">Historial</div>${S.hist.slice().reverse().map(h=>`<div class="card" style="cursor:pointer;margin-bottom:5px" onclick="set({q:'${h.q.replace(/'/g,"\\'")}'})""><div style="font-size:9px;color:var(--t3);font-family:monospace;margin-bottom:3px">${h.ts}</div><div style="font-size:11.5px;color:var(--t2)">💬 ${h.q}</div></div>`).join("")}`:""}${!S.qr&&!S.lq&&!S.hist.length?`<div class="stl">Preguntas frecuentes</div>${FAQ.map(q=>`<div class="card" style="cursor:pointer;margin-bottom:6px" onclick="set({q:'${q.replace(/'/g,"\\'")}'})""><div style="font-size:11.5px;color:var(--t2)">💬&nbsp; ${q}</div></div>`).join("")}`:""}`;
+    b = bloq ? `<div style="position:relative;min-height:200px">${lockBox('consultas')}</div>${usoBar('consultas','Consultas')}` :
+      `<div class="lbl">Consultá al Asesor IA</div><textarea class="inp" id="qi" style="height:88px;margin-bottom:9px" placeholder="Ej: ¿Cómo dolarizo precios? ¿Qué crédito conviene?">${S.q}</textarea><button class="btn btn-b" style="margin-bottom:12px;opacity:${S.q.trim()&&!S.lq?1:.35}" onclick="const v=document.getElementById('qi')?.value||S.q;set({q:v});gQ()">${S.lq?"⚙️ Procesando...":"🔍&nbsp; Consultar"}</button>${S.lq?`<div style="text-align:center;padding:8px;color:var(--t3);font-size:12px">Procesando...</div>`:""}${S.qr?`<div class="aib">${S.qr}</div>`:""}${!S.qr&&!S.lq&&S.hist.length?`<div class="stl">Historial</div>${S.hist.slice().reverse().map(h=>`<div class="card" style="cursor:pointer;margin-bottom:5px" onclick="set({q:'${h.q.replace(/'/g,"\\'")}'})""><div style="font-size:9px;color:var(--t3);font-family:monospace;margin-bottom:3px">${h.ts}</div><div style="font-size:11.5px;color:var(--t2)">💬 ${h.q}</div></div>`).join("")}`:""}${!S.qr&&!S.lq&&!S.hist.length?`<div class="stl">Preguntas frecuentes</div>${FAQ.map(q=>`<div class="card" style="cursor:pointer;margin-bottom:6px" onclick="set({q:'${q.replace(/'/g,"\\'")}'})""><div style="font-size:11.5px;color:var(--t2)">💬&nbsp; ${q}</div></div>`).join("")}`:""}${usoBar('consultas','Consultas')}`;
   }else{
     const own=SD[S.sector]||SD.otro,comp=SD[S.comp]||SD.tech;
     const seOwn=SEC.find(x=>x.id===S.sector),seComp=SEC.find(x=>x.id===S.comp);
@@ -354,70 +500,86 @@ function pgSol(){
       </div>
     </div>
     <div class="card2" style="background:${r.loss>5?"rgba(239,79,79,.07)":"rgba(240,151,48,.07)"};border-color:${r.loss>5?"rgba(239,79,79,.22)":"rgba(240,151,48,.22)"}">
-      <div style="font-size:11.5px;color:var(--t2);margin-bottom:5px">📉 Erosión de margen: <b style="color:${r.loss>5?"#EF4F4F":"#F09730"}">${r.loss.toFixed(1)} pp</b></div>
+      <div style="font-size:11.5px;color:var(--t2);margin-bottom:5px">📉 Erosión: <b style="color:${r.loss>5?"#EF4F4F":"#F09730"}">${r.loss.toFixed(1)} pp</b></div>
       <div style="font-size:11.5px;color:var(--t2);margin-bottom:4px">💰 Costo proyectado: <b style="color:var(--t1)">$${fmt(r.cF)}</b></div>
       <div style="font-size:11.5px;color:var(--t2)">⚡ Precio necesario: <b style="color:#27C3F0">$${fmt(r.pN)}</b> <span style="color:#F09730">(+${r.adj.toFixed(1)}%)</span></div>
     </div></div>`;
   }
   if(S.stab==="escenarios"){
+    const bloq = !puede('escenarios');
     return `<div class="pad">${stabs}<div class="stl">Análisis de Escenarios Macro</div>
-    ${[{id:"base",e:"📊",ti:"Escenario Base",de:"Desinflación gradual, TC en banda, tasas bajando hacia dic/26"},{id:"accel",e:"🚀",ti:"Escenario Optimista",de:"Inflación 1.5%/mes, TC estable, crédito se abre, consumo acelera"},{id:"shock",e:"⚡",ti:"Escenario Adverso",de:"Salto cambiario +40%, inflación rebota 6%/mes, recesión"}].map(sc=>`<div class="sc-c ${S.scen===sc.id?"on":""}" onclick="set({scen:'${sc.id}'})"><div style="font-size:13px;font-weight:700;margin-bottom:3px">${sc.e} ${sc.ti}</div><div style="font-size:11px;color:var(--t2);line-height:1.5">${sc.de}</div></div>`).join("")}
+    ${bloq ? `<div style="position:relative;min-height:200px">${lockBox('escenarios')}</div>${usoBar('escenarios','Escenarios')}` :
+    `${[{id:"base",e:"📊",ti:"Escenario Base",de:"Desinflación gradual, TC en banda, tasas bajando hacia dic/26"},{id:"accel",e:"🚀",ti:"Escenario Optimista",de:"Inflación 1.5%/mes, TC estable, crédito se abre, consumo acelera"},{id:"shock",e:"⚡",ti:"Escenario Adverso",de:"Salto cambiario +40%, inflación rebota 6%/mes, recesión"}].map(sc=>`<div class="sc-c ${S.scen===sc.id?"on":""}" onclick="set({scen:'${sc.id}'})"><div style="font-size:13px;font-weight:700;margin-bottom:3px">${sc.e} ${sc.ti}</div><div style="font-size:11px;color:var(--t2);line-height:1.5">${sc.de}</div></div>`).join("")}
     <button class="btn btn-b" style="margin-top:4px" onclick="gScen()">${S.ld?"⚙️ Analizando...":"🤖&nbsp; Analizar Impacto con IA"}</button>
-    ${S.ld?`<div class="spw" style="padding:22px 0"><div class="sp">🔮</div><div class="sp-t">Proyectando escenario...</div></div>`:""}
+    ${S.ld?`<div class="spw" style="padding:22px 0"><div class="sp">🔮</div><div class="sp-t">Proyectando...</div></div>`:""}
+    ${usoBar('escenarios','Escenarios')}`}
     </div>`;
   }
+  const bloqPlan = !puede('planes');
   if(S.ld)return `<div class="spw"><div class="sp">🎯</div><div class="sp-t">Elaborando plan de acción...</div></div>`;
-  if(S.sol)return `<div class="pad">${stabs}<div style="background:linear-gradient(135deg,rgba(77,121,255,.13),rgba(77,121,255,.05));border:1px solid rgba(77,121,255,.22);border-radius:var(--r);padding:12px 14px;margin-bottom:12px"><div style="font-size:9px;font-weight:700;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Plan de Acción · PyMEdata</div><div style="font-weight:800;font-size:15px">${se?.e} ${se?.l}</div><div style="font-size:10px;color:var(--t3);margin-top:2px">Mayo 2026 · Framework FCE-UNLP · Fernando Toledo</div></div><div class="aib">${S.sol}</div><div class="btn-row"><button class="btn btn-o" onclick="set({sol:null});gSol()">🔄 Regenerar</button><button class="btn btn-b" onclick="set({sc:'monitor',stab:'alertas'})">Monitor →</button></div></div>`;
-  return `<div class="pad">${stabs}<div class="emp"><div class="emp-i">🎯</div><div class="emp-t">${S.diag?"Tu diagnóstico está listo.\nGenerá el plan de acción.":"Primero configurá tu perfil\ny generá el diagnóstico."}</div>${S.diag?`<button class="btn btn-g" onclick="gSol()">Generar Plan de Acción</button>`:`<button class="btn btn-o" onclick="set({sc:'perfil',stab:''})">Ir al Perfil</button>`}</div></div>`;
+  if(bloqPlan)return `<div class="pad">${stabs}<div style="position:relative;min-height:200px">${lockBox('planes')}</div>${usoBar('planes','Planes')}</div>`;
+  if(S.sol)return `<div class="pad">${stabs}<div style="background:linear-gradient(135deg,rgba(77,121,255,.13),rgba(77,121,255,.05));border:1px solid rgba(77,121,255,.22);border-radius:var(--r);padding:12px 14px;margin-bottom:12px"><div style="font-size:9px;font-weight:700;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px">Plan de Acción · PyMEdata</div><div style="font-weight:800;font-size:15px">${se?.e} ${se?.l}</div><div style="font-size:10px;color:var(--t3);margin-top:2px">Mayo 2026 · Framework FCE-UNLP · Fernando Toledo</div></div><div class="aib">${S.sol}</div>${usoBar('planes','Planes')}<div class="btn-row"><button class="btn btn-o" onclick="set({sol:null});gSol()">🔄 Regenerar</button><button class="btn btn-b" onclick="set({sc:'monitor',stab:'alertas'})">Monitor →</button></div></div>`;
+  return `<div class="pad">${stabs}<div class="emp"><div class="emp-i">🎯</div><div class="emp-t">${S.diag?"Tu diagnóstico está listo. Generá el plan.":"Primero configurá tu perfil y generá el diagnóstico."}</div>${S.diag?`<button class="btn btn-g" onclick="gSol()">Generar Plan de Acción</button>${usoBar('planes','Planes')}`:`<button class="btn btn-o" onclick="set({sc:'perfil',stab:''})">Ir al Perfil</button>`}</div></div>`;
 }
 
 function pgMon(){
   if(!["alertas","vencimientos","kpis","fuentes"].includes(S.stab))Object.assign(S,{stab:"alertas"});
   const stabs=`<div class="stabs">${[["alertas","Alertas"],["vencimientos","Vencimientos"],["kpis","KPIs"],["fuentes","Fuentes"]].map(([id,l])=>`<button class="stab ${S.stab===id?"on":""}" onclick="set({stab:'${id}'})">${l}</button>`).join("")}</div>`;
   const ALS=[{n:"am",i:"📅",ti:"IPC Abril 2026",tx:"Publicación: 14 de mayo (INDEC). Mayorista ~0.8–1%/mes. Evaluá trasladabilidad.",sr:"INDEC"},{n:"am",i:"💱",ti:"Tipo de Cambio",tx:"TC $1.429/USD (mar/26). Proyec. dic/26: $1.707. Depreciación esperada: +19.4%.",sr:"BCRA/REM"},{n:S.im||S.us?"red":"vd",i:"📦",ti:"Insumos Importados",tx:S.im||S.us?"⚠️ Exposición cambiaria alta en tu perfil. Seguí el TC mayorista a diario.":"Riesgo bajo: sin exposición importadora directa en tu perfil.",sr:"BCRA"},{n:"vd",i:"🏦",ti:"Crédito PyME",tx:"TAMAR: 30.9% TNA → 24.2% proyectada dic/26. Ventana de financiamiento en apertura.",sr:"REM-BCRA"},{n:"vd",i:"📊",ti:"Actividad",tx:"PIB +3.4% proyectado. Salarios reales en recuperación. Demanda en alza.",sr:"REM-BCRA"},{n:"am",i:"⚖️",ti:"Agenda Fiscal",tx:"Verificá IIBB (ARBA) y tasas municipales. Presión en cascada sobre márgenes.",sr:"ARBA/AFIP"}];
+  const VENC_=[{d:"14 May",t:"Publicación IPC Abril 2026",c:"INDEC",u:"am"},{d:"15 May",t:"Vto. IIBB Quincenal — 1ª quincena",c:"ARBA",u:"red"},{d:"20 May",t:"Vto. Monotributo / Autónomos",c:"AFIP",u:"red"},{d:"22 May",t:"Vto. IVA mensual",c:"AFIP",u:"red"},{d:"28 May",t:"Vto. Ganancias — anticipos",c:"AFIP",u:"am"},{d:"30 May",t:"Vto. IIBB Quincenal — 2ª quincena",c:"ARBA",u:"red"},{d:"10 Jun",t:"Cargas Sociales — sueldos mayo",c:"AFIP",u:"am"},{d:"15 Jun",t:"Publicación IPC Mayo 2026",c:"INDEC",u:"am"}];
   let b="";
   if(S.stab==="alertas")b=ALS.map(a=>alC(a.n,a.i,a.ti,a.tx,a.sr)).join("");
-  else if(S.stab==="vencimientos")b=VENC.map(v=>{const c=v.u==="red"?"#EF4F4F":"#F09730";return `<div class="notif"><div class="ndot" style="background:${c};box-shadow:0 0 5px ${c}44;flex-shrink:0"></div><div style="font-size:11px;color:var(--t2);flex:1;line-height:1.4"><b style="color:var(--t1)">${v.c}</b> — ${v.t}</div><div style="font-size:10px;font-weight:700;color:${c};white-space:nowrap">${v.d}</div></div>`;}).join("");
+  else if(S.stab==="vencimientos")b=VENC_.map(v=>{const c=v.u==="red"?"#EF4F4F":"#F09730";return `<div class="notif"><div class="ndot" style="background:${c};box-shadow:0 0 5px ${c}44;flex-shrink:0"></div><div style="font-size:11px;color:var(--t2);flex:1;line-height:1.4"><b style="color:var(--t1)">${v.c}</b> — ${v.t}</div><div style="font-size:10px;font-weight:700;color:${c};white-space:nowrap">${v.d}</div></div>`;}).join("");
   else if(S.stab==="kpis")b=KPI.map(k=>`<div class="card kc"><div class="kci" style="background:${k.c}18;border:1px solid ${k.c}30">${k.i}</div><div><div style="font-weight:700;font-size:13px;color:${k.c}">${k.l}</div><div style="font-size:11px;color:var(--t3);margin-top:2px">${k.d}</div></div></div>`).join("");
   else b=[["📊","INDEC","Inflación, PIB, actividad","indec.gob.ar"],["🏦","BCRA","Tipo de cambio, tasas","bcra.gob.ar"],["📋","ARBA","Ingresos Brutos PBA","arba.gob.ar"],["📁","AFIP","Obligaciones fiscales","afip.gob.ar"],["💼","SEPyME","Programas y créditos","argentina.gob.ar/sepyme"],["🏦","Bco. Provincia","Líneas PyME PBA","bancobapro.com.ar"]].map(([e,n,d,u])=>`<div class="card" style="display:flex;align-items:center;gap:11px;margin-bottom:6px"><span style="font-size:16px">${e}</span><div><div style="font-size:12px;font-weight:700">${n} <span style="font-weight:400;color:var(--t3);font-size:11px">— ${d}</span></div><div style="font-size:9px;color:var(--t3);margin-top:2px;font-family:'JetBrains Mono',monospace">${u}</div></div></div>`).join("");
   return `<div class="pad">${stabs}${b}</div>`;
 }
 
-function pgTarifas(){
-  const PLANS=[
-    {id:"s",cls:"",c:"var(--t2)",badge:"",bc:"",name:"Starter",usd:0,ars:0,period:"",tag:"Sin cargo · Sin tarjeta",feats:[{y:true,t:"Dashboard macro (INDEC · BCRA · REM)"},{y:true,t:"Gráficos evolución 12 meses"},{y:true,t:"Monitor alertas y vencimientos ARBA/AFIP"},{y:true,t:"Simulador de margen (offline)"},{y:false,t:"Diagnóstico IA personalizado"},{y:false,t:"Plan de acción con IA"},{y:false,t:"Escenarios macro"}],btn:"Empezar gratis",btnC:"btn-o"},
-    {id:"p",cls:"pro",c:"var(--blue)",badge:"MÁS ELEGIDO",bc:"var(--blue)",name:"Pro",usd:19,ars:19*TC,period:"/mes",tag:"Menos que 20 min de consultoría",feats:[{y:true,t:"Todo lo de Starter"},{y:true,t:"Diagnóstico IA — hasta 15/mes"},{y:true,t:"Plan de acción con instrumentos reales"},{y:true,t:"Análisis de escenarios macro"},{y:true,t:"Comparador sectorial"},{y:true,t:"10 consultas libres al asesor IA"},{y:false,t:"Consultas IA ilimitadas"}],btn:"Suscribirse al Plan Pro",btnC:"btn-b"},
-    {id:"x",cls:"prem",c:"var(--gold)",badge:"ILIMITADO",bc:"var(--gold)",name:"Premium",usd:49,ars:49*TC,period:"/mes",tag:"Acceso total sin límites",feats:[{y:true,t:"Todo lo de Pro"},{y:true,t:"Diagnóstico y Plan IA ilimitados"},{y:true,t:"Consultas IA ilimitadas + historial"},{y:true,t:"Reportes exportables PDF"},{y:true,t:"Soporte WhatsApp < 24 h"},{y:true,t:"API Key propia sin límites adicionales"}],btn:"Suscribirse Premium",btnC:"btn-g"},
-    {id:"c",cls:"elite",c:"var(--purple)",badge:"MULTI-CLIENTE",bc:"var(--purple)",name:"Contador / Asesor",usd:89,ars:89*TC,period:"/mes",tag:"Hasta 20 empresas simultáneas",feats:[{y:true,t:"Todo lo de Premium"},{y:true,t:"Hasta 20 perfiles de empresa"},{y:true,t:"Dashboard comparativo multi-empresa"},{y:true,t:"Reportes PDF con membrete propio"},{y:true,t:"Factura a nombre del estudio"},{y:true,t:"Soporte telefónico dedicado"}],btn:"Suscribirse — Contador",btnC:"btn-b"},
+function pgCuenta(){
+  const plan = PROFILE?.plan || 'starter';
+  const pc = planColor(plan);
+  const pn = planNombre(plan);
+  const PLANES_LIST=[
+    {id:"starter",c:"var(--t2)",nombre:"Starter",usd:0,desc:"Gratis · Sin cargo"},
+    {id:"pro",c:"var(--blue)",nombre:"Pro",usd:19,desc:"USD 19/mes · ≈ $26.600 ARS"},
+    {id:"premium",c:"var(--gold)",nombre:"Premium",usd:49,desc:"USD 49/mes · ≈ $68.600 ARS"},
+    {id:"contador",c:"var(--purple)",nombre:"Contador/Asesor",usd:89,desc:"USD 89/mes · ≈ $124.600 ARS"},
   ];
   return `<div class="pad">
-  <div style="margin-bottom:6px"><div style="font-weight:800;font-size:18px;margin-bottom:3px">Planes y Tarifas</div><div style="font-size:11px;color:var(--t3)">USD · ARS a TC $${TC.toLocaleString("es-AR")}/USD (BCRA, mayo 2026)</div></div>
-  <div class="card2" style="margin-bottom:12px;border-color:rgba(30,201,106,.25);background:rgba(30,201,106,.05)">
-    <div style="font-size:10px;font-weight:700;color:#1EC96A;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px">📊 Contexto de Mercado</div>
-    ${[{n:"Power BI Pro",p:"USD 10/mes",d:"BI genérico · Sin contexto Arg. · Sin IA económica",h:false},{n:"Consultoría económica senior (1 hora)",p:"USD 50–100",d:"Solo 1 reunión · Sin monitoreo continuo",h:false},{n:"PyMEdata Plan Pro",p:"USD 19/mes",d:"Dashboard + IA económica + Simuladores + Datos verificados",h:true}].map(b=>`<div class="bench" style="${b.h?"border-color:rgba(30,201,106,.3);background:rgba(30,201,106,.06)":""}"><div class="bench-row"><span style="font-size:11px;font-weight:700;color:${b.h?"#1EC96A":"var(--t2)"}">${b.n}</span><span style="font-size:11px;font-weight:700;color:${b.h?"#1EC96A":"var(--t2)"};font-family:'JetBrains Mono',monospace">${b.p}</span></div><div style="font-size:10px;color:var(--t3);margin-top:2px">${b.d}</div></div>`).join("")}
+  <div style="margin-bottom:16px"><div style="font-weight:800;font-size:18px;margin-bottom:3px">Mi Cuenta</div><div style="font-size:12px;color:var(--t3)">Gestioná tu suscripción y configuración</div></div>
+  <div class="card2" style="margin-bottom:14px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+      <div style="width:44px;height:44px;border-radius:12px;background:${pc}20;border:1px solid ${pc}40;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">👤</div>
+      <div>
+        <div style="font-weight:700;font-size:14px">${PROFILE?.nombre||'Usuario'}</div>
+        <div style="font-size:12px;color:var(--t3)">${USER?.email||''}</div>
+        <div style="margin-top:4px"><span class="plan-chip" style="background:${pc}20;border:1px solid ${pc}40;color:${pc}">Plan ${pn}</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      ${[["🔍","Diagnósticos",USO?.diagnosticos||0,PLAN_LIMITES[plan]?.diagnosticos],["🎯","Planes",USO?.planes||0,PLAN_LIMITES[plan]?.planes],["💬","Consultas IA",USO?.consultas||0,PLAN_LIMITES[plan]?.consultas],["🔮","Escenarios",USO?.escenarios||0,PLAN_LIMITES[plan]?.escenarios]].map(([e,l,u,lim])=>`<div style="background:var(--bg1);border:1px solid var(--bd2);border-radius:10px;padding:10px">
+        <div style="font-size:16px;margin-bottom:4px">${e}</div>
+        <div style="font-size:18px;font-weight:800;color:${lim===-1?"#1EC96A":lim===0?"var(--t3)":u>=lim?"#EF4F4F":"var(--t1)"}">${u}</div>
+        <div style="font-size:10px;color:var(--t3)">${l} · ${lim===-1?"∞":lim===0?"bloqueado":lim+" máx"}</div>
+      </div>`).join("")}
+    </div>
   </div>
-  ${PLANS.map(p=>`<div class="plan ${p.cls}">
-    ${p.badge?`<div class="plan-badge" style="background:${p.bc}20;border:1px solid ${p.bc}50;color:${p.bc}">${p.badge}</div>`:""}
-    <div class="pln" style="color:${p.c}">${p.name}</div>
-    ${p.usd===0?`<div class="plprice"><span class="plprice-usd" style="color:${p.c}">Gratis</span></div><div style="font-size:11px;color:var(--t3);margin-bottom:10px">${p.tag}</div>`:`<div class="plprice"><span class="plprice-usd" style="color:${p.c}">USD ${p.usd}</span><span style="font-size:11px;color:var(--t3)">${p.period}</span></div><div class="plars">≈ $${fmt(p.ars)} ARS${p.period}</div><div style="font-size:11px;color:var(--t3);margin-bottom:10px">${p.tag}</div>`}
-    <div style="margin-bottom:12px">${p.feats.map(f=>`<div class="plf ${f.y?"y":""}"><span style="color:${f.y?p.c:"var(--t3)"};flex-shrink:0">${f.y?"✓":"✗"}</span><span>${f.t}</span></div>`).join("")}</div>
-    <button class="btn ${p.btnC}">${p.btn}</button>
+  <div class="stl">Planes disponibles</div>
+  ${PLANES_LIST.map(p=>`<div class="card" style="border-color:${plan===p.id?p.c+"50":"var(--bd2)"};background:${plan===p.id?p.c+"10":"var(--bg1)"}">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-weight:700;font-size:13px;color:${p.c}">${p.nombre}</div><div style="font-size:11px;color:var(--t3)">${p.desc}</div></div>
+      ${plan===p.id?`<span style="font-size:10px;font-weight:700;color:${p.c};border:1px solid ${p.c}40;border-radius:5px;padding:3px 8px">ACTIVO</span>`:`<button style="background:${p.c};color:${p.id==="starter"?"#09090E":"#fff"};border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif" onclick="alert('Integración de pagos próximamente. Contactar a Fernando Toledo para activar plan.')">Cambiar</button>`}
+    </div>
   </div>`).join("")}
-  <div class="card2"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:5px">💡 API Key propia de Anthropic</div><div style="font-size:11px;color:var(--t3);line-height:1.6">Conectá tu API Key en Perfil → el costo de IA va a tu cuenta Anthropic (~USD 0.003/análisis). Fernando Toledo no consume tokens de su cuota.</div></div>
+  <div class="stl" style="margin-top:8px">Sesión</div>
+  <button class="btn btn-r" onclick="doLogout()">🚪&nbsp; Cerrar sesión</button>
   </div>`;
 }
 
-function pgLegal(){
-  return `<div class="pad">
-  <div style="margin-bottom:14px"><div style="font-weight:800;font-size:18px;margin-bottom:3px">Información Legal</div><div style="font-size:12px;color:var(--t3)">Fernando Toledo · FCE-UNLP · La Plata, Argentina</div></div>
-  ${[["⚖️ Aviso Legal","La información, análisis y recomendaciones tienen carácter exclusivamente informativo y educativo. No constituyen asesoramiento financiero, contable, impositivo ni legal. Fernando Toledo, FCE-UNLP y los desarrolladores no asumen responsabilidad por decisiones empresariales tomadas en base al contenido presentado."],["🏛️ Autoría — PyMEdata","El marco analítico de Canales de Transmisión Macroeconómica para PyMEs (Canal Precio, Canal Crédito, Canal Demanda, Canal Cambiario) es de autoría de Fernando Toledo, docente-investigador de la Facultad de Ciencias Económicas, Universidad Nacional de La Plata (FCE-UNLP). © 2026 Fernando Toledo. Todos los derechos reservados."],["📊 Verificabilidad","Todos los indicadores provienen de fuentes oficiales: INDEC (inflación, actividad económica), BCRA (tipo de cambio, tasas de interés, REM). Los datos se actualizan con cada publicación oficial. Las proyecciones son estimaciones de mercado (REM-BCRA, IERAL)."],["🔒 Privacidad","PyMEdata no almacena ni comparte datos personales. El perfil empresarial se guarda solo en tu dispositivo. No recopilamos cookies de seguimiento, datos de comportamiento ni información de uso."],["🤖 Uso de IA","Los análisis generados por IA (Claude / Anthropic) tienen carácter orientativo. La IA puede cometer errores. Todo output debe ser verificado críticamente. Fernando Toledo no avala individualmente los análisis generados automáticamente."]].map(([t,d])=>`<div class="leg"><div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:5px">${t}</div><div style="font-size:10.5px;color:var(--t3);line-height:1.6">${d}</div></div>`).join("")}
-  <div style="text-align:center;padding:14px 0 8px;font-size:10px;color:var(--t3)">© 2026 PyMEdata · Fernando Toledo · FCE-UNLP · La Plata<br>Desarrollado sobre Claude (Anthropic) · v1.0 Mayo 2026</div>
-  </div>`;
-}
-
-const HDR={inicio:{t:"Tablero",s:"CONTEXTO MACRO · MAYO 2026"},perfil:{t:"Mi Empresa",s:"PERFIL EMPRESARIAL"},diagnostico:{t:"Diagnóstico",s:"CANALES · ANÁLISIS · COMPARADOR"},soluciones:{t:"Soluciones",s:"PLAN · SIMULADOR · ESCENARIOS"},monitor:{t:"Monitor",s:"ALERTAS · VENCIMIENTOS · KPIs"},tarifas:{t:"Planes",s:"PRECIOS · PYMEDATA"},legal:{t:"Legal",s:"FERNANDO TOLEDO · FCE-UNLP"}};
+/* ══ RENDER ══ */
+const HDR_MAP={inicio:{s:"CONTEXTO MACRO · MAYO 2026"},perfil:{s:"PERFIL EMPRESARIAL"},diagnostico:{s:"CANALES · ANÁLISIS · COMPARADOR"},soluciones:{s:"PLAN · SIMULADOR · ESCENARIOS"},monitor:{s:"ALERTAS · VENCIMIENTOS · KPIs"},cuenta:{s:"MI CUENTA · SUSCRIPCIÓN"}};
 const NAV=[{id:"inicio",l:"Inicio",e:"🏠"},{id:"perfil",l:"Perfil",e:"🏢"},{id:"diagnostico",l:"Diagnóst.",e:"🔍"},{id:"soluciones",l:"Soluciones",e:"🎯"},{id:"monitor",l:"Monitor",e:"🔔"}];
-const PG={inicio:pgInicio,perfil:pgPerfil,diagnostico:pgDiag,soluciones:pgSol,monitor:pgMon,tarifas:pgTarifas,legal:pgLegal};
+const PG={inicio:pgInicio,perfil:pgPerfil,diagnostico:pgDiag,soluciones:pgSol,monitor:pgMon,cuenta:pgCuenta};
 
 function navTo(id){
   if((id==="diagnostico"||id==="soluciones")&&!S.ok)set({sc:"perfil",stab:""});
@@ -425,24 +587,27 @@ function navTo(id){
 }
 
 function R(){
-  const h=HDR[S.sc]||HDR.inicio;
-  document.getElementById("ht").innerHTML=`PyME<span style="color:var(--blue)">data</span> <span style="font-size:11px;font-weight:500;color:var(--t3)">· ${h.t}</span>`;
-  document.getElementById("hs").textContent=h.s;
-  const se=SEC.find(x=>x.id===S.sector);
-  const extra=[{id:"tarifas",e:"💎",l:"Planes"},{id:"legal",e:"⚖️",l:"Legal"}];
-  document.getElementById("hright").innerHTML=
-    `${S.ok&&se?`<div class="hbadge">${se.e} ${se.l.split("/")[0].trim()}</div>`:``}
-     ${extra.map(x=>`<div class="hbtn ${S.sc===x.id?"on":""}" onclick="set({sc:'${x.id}',stab:''})">${x.e} ${x.l}</div>`).join("")}
-     <a href="index.html" class="hbtn" style="text-decoration:none">🏠</a>`;
-  document.getElementById("scr").innerHTML=(PG[S.sc]||pgInicio)();
-  document.getElementById("nav").innerHTML=NAV.map(it=>`<button class="nb ${S.sc===it.id?"on":""}" onclick="navTo('${it.id}')"><span class="nb-i">${it.e}</span><span class="nb-l">${it.l}</span></button>`).join("");
+  const h = HDR_MAP[S.sc] || HDR_MAP.inicio;
+  document.getElementById("ht").innerHTML = `PyME<span>data</span>`;
+  document.getElementById("hs").textContent = h.s;
+  const se = SEC.find(x=>x.id===S.sector);
+  const plan = PROFILE?.plan || 'starter';
+  const pc = planColor(plan);
+  document.getElementById("hright").innerHTML =
+    `${S.ok&&se?`<div class="hbadge" style="color:var(--t2)">${se.e} ${se.l.split("/")[0].trim()}</div>`:``}
+     <div class="hbtn ${S.sc==="cuenta"?"on":""}" onclick="set({sc:'cuenta',stab:''})">
+       <span class="plan-chip" style="background:${pc}20;border:1px solid ${pc}40;color:${pc}">${planNombre(plan)}</span>
+     </div>`;
+  document.getElementById("scr").innerHTML = (PG[S.sc]||pgInicio)();
+  document.getElementById("nav").innerHTML = NAV.map(it=>`<button class="nb ${S.sc===it.id?"on":""}" onclick="navTo('${it.id}')"><span class="nb-i">${it.e}</span><span class="nb-l">${it.l}</span></button>`).join("");
   if(S.sc==="inicio"){const sr=SER[S.cs];drawChart("mc",sr.d,sr.c,sr.lbl);}
 }
 
+/* ══ INIT ══ */
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
-R();
+initAuth();
 </script>
 </body>
 </html>

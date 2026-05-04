@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PyMEdata — Panel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg0:#05071A;--bg1:#0A0E24;--bg2:#0F152E;--bg3:#162040;--blue:#4D79FF;--blue2:#2B53D5;--gold:#DDA93B;--green:#1EC96A;--red:#EF4F4F;--amber:#F09730;--purple:#8B6FF0;--t1:#EFF3FF;--t2:#7A8FBA;--t3:#3C4F70;--bd2:rgba(255,255,255,.055);--r:13px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--bg0);font-family:'Outfit',sans-serif;color:var(--t1);font-size:14px;}
+body{padding:0 0 40px;}
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--bg0);display:flex;align-items:center;justify-content:center;z-index:100;}
+.sp-ring{width:40px;height:40px;border:3px solid rgba(77,121,255,.2);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* LAYOUT */
+.top-bar{background:linear-gradient(180deg,#101535,var(--bg0));border-bottom:1px solid var(--bd2);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.top-logo{display:flex;align-items:center;gap:10px;}
+.top-logo-ic{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue2),var(--blue));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.top-logo-txt{font-size:17px;font-weight:800;}
+.top-logo-txt span{color:var(--blue);}
+.top-badge{background:rgba(239,79,79,.15);border:1px solid rgba(239,79,79,.4);color:#EF4F4F;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;}
+.inner{max-width:1100px;margin:0 auto;padding:24px;}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;}
+.stat-card{background:var(--bg1);border:1px solid var(--bd2);border-radius:var(--r);padding:16px;}
+.stat-val{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;}
+.stat-lbl{font-size:11px;color:var(--t2);margin-top:6px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+/* TABLE */
+.table-card{background:var(--bg1);border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;margin-bottom:20px;}
+.table-header{padding:14px 18px;border-bottom:1px solid var(--bd2);display:flex;justify-content:space-between;align-items:center;}
+.table-title{font-size:14px;font-weight:700;}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--bg2);font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.8px;text-transform:uppercase;padding:11px 14px;text-align:left;}
+td{padding:11px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.03);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(77,121,255,.04);}
+.plan-badge{display:inline-block;border-radius:5px;padding:2px 8px;font-size:10px;font-weight:700;}
+/* BUTTONS */
+.btn{border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:filter .2s;}
+.btn:hover{filter:brightness(1.1);}
+.btn-blue{background:linear-gradient(135deg,var(--blue2),var(--blue));color:#fff;}
+.btn-red{background:linear-gradient(135deg,#A01515,var(--red));color:#fff;}
+.btn-gold{background:linear-gradient(135deg,#A87820,var(--gold));color:#09090E;}
+.btn-ghost{background:transparent;color:var(--blue);border:1.5px solid rgba(77,121,255,.35);}
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal.open{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--bd2);border-radius:16px;padding:24px;width:100%;max-width:440px;}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;}
+.inp{width:100%;background:var(--bg1);border:1.5px solid var(--bd2);border-radius:10px;color:var(--t1);font-size:13px;padding:10px 13px;outline:none;font-family:'Outfit',sans-serif;margin-bottom:12px;}
+.sel{width:100%;background:var(--bg1);border:1.5px solid var(--bd2);border-radius:10px;color:var(--t1);font-size:13px;padding:10px 13px;outline:none;cursor:pointer;margin-bottom:12px;appearance:none;font-family:'Outfit',sans-serif;}
+.lbl{font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.7px;text-transform:uppercase;margin-bottom:6px;display:block;}
+/* ALERT */
+.alert{border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none;}
+.alert.show{display:block;}
+.alert.ok{background:rgba(30,201,106,.1);border:1px solid rgba(30,201,106,.3);color:#1EC96A;}
+.alert.err{background:rgba(239,79,79,.1);border:1px solid rgba(239,79,79,.3);color:#EF4F4F;}
+/* SEARCH */
+.search-row{display:flex;gap:10px;align-items:center;}
+.search-inp{flex:1;background:var(--bg2);border:1.5px solid var(--bd2);border-radius:10px;color:var(--t1);font-size:13px;padding:8px 13px;outline:none;font-family:'Outfit',sans-serif;}
+select option{background:var(--bg2);color:var(--t1);}
+</style>
+</head>
+<body>
+
+<div id="splash"><div class="sp-ring"></div></div>
+
+<div id="main" style="display:none">
+
+<div class="top-bar">
+  <div class="top-logo">
+    <div class="top-logo-ic">📊</div>
+    <span class="top-logo-txt">PyME<span>data</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="top-badge">🔐 Panel Admin</div>
+    <div id="admin-email" style="font-size:12px;color:var(--t3)"></div>
+    <button class="btn btn-ghost" onclick="doLogout()" style="font-size:12px;padding:6px 12px">Salir</button>
+  </div>
+</div>
+
+<div class="inner">
+
+  <!-- STATS -->
+  <div id="alert-global" class="alert"></div>
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="s-total">—</div><div class="stat-lbl">Usuarios totales</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#4D79FF" id="s-pro">—</div><div class="stat-lbl">Plan Pro</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#DDA93B" id="s-prem">—</div><div class="stat-lbl">Plan Premium</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#8B6FF0" id="s-cont">—</div><div class="stat-lbl">Contador</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#1EC96A" id="s-diag">—</div><div class="stat-lbl">Diagnósticos hoy</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#F09730" id="s-mrr">—</div><div class="stat-lbl">MRR estimado (USD)</div></div>
+  </div>
+
+  <!-- USUARIOS -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">👥 Empresarios registrados</div>
+      <div class="search-row">
+        <input class="search-inp" id="search" placeholder="Buscar por email o empresa..." oninput="filtrarUsuarios()">
+        <button class="btn btn-blue" onclick="abrirNuevoUsuario()">+ Nuevo usuario</button>
+        <button class="btn btn-ghost" onclick="cargarUsuarios()">↻ Actualizar</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table id="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Nombre / Empresa</th>
+            <th>Sector</th>
+            <th>Plan</th>
+            <th>Diag. mes</th>
+            <th>Consultas mes</th>
+            <th>Total diag.</th>
+            <th>Registrado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-usuarios">
+          <tr><td colspan="9" style="text-align:center;padding:32px;color:var(--t3)">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ULTIMOS DIAGNOSTICOS -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">🔍 Últimos diagnósticos generados</div>
+      <button class="btn btn-ghost" onclick="cargarDiagnosticos()">↻ Actualizar</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr><th>Fecha</th><th>Usuario</th><th>Sector</th><th>Tipo</th><th>Resultado (preview)</th></tr>
+        </thead>
+        <tbody id="tbody-diag">
+          <tr><td colspan="5" style="text-align:center;padding:24px;color:var(--t3)">Cargando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- MODAL: editar usuario -->
+<div class="modal" id="modal-usuario">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-titulo">Editar usuario</div>
+    <div id="modal-alert" class="alert"></div>
+    <input type="hidden" id="edit-id">
+    <div class="lbl">Nombre</div>
+    <input class="inp" id="edit-nombre" placeholder="Juan García">
+    <div class="lbl">Empresa</div>
+    <input class="inp" id="edit-empresa" placeholder="Ferretería García SRL">
+    <div class="lbl">Plan</div>
+    <select class="sel" id="edit-plan">
+      <option value="starter">Starter — Gratis</option>
+      <option value="pro">Pro — USD 19/mes</option>
+      <option value="premium">Premium — USD 49/mes</option>
+      <option value="contador">Contador/Asesor — USD 89/mes</option>
+    </select>
+    <div class="lbl">Plan activo</div>
+    <select class="sel" id="edit-activo">
+      <option value="true">Activo ✓</option>
+      <option value="false">Suspendido ✗</option>
+    </select>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-blue" style="flex:1" onclick="guardarUsuario()">Guardar cambios</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="cerrarModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: nuevo usuario -->
+<div class="modal" id="modal-nuevo">
+  <div class="modal-box">
+    <div class="modal-title">Agregar nuevo usuario</div>
+    <div id="nuevo-alert" class="alert"></div>
+    <div class="lbl">Email</div>
+    <input class="inp" id="nuevo-email" type="email" placeholder="juan@empresa.com">
+    <div class="lbl">Contraseña temporal</div>
+    <input class="inp" id="nuevo-pass" type="text" placeholder="Mínimo 8 caracteres">
+    <div class="lbl">Nombre</div>
+    <input class="inp" id="nuevo-nombre" placeholder="Juan García">
+    <div class="lbl">Empresa</div>
+    <input class="inp" id="nuevo-empresa" placeholder="Ferretería García SRL">
+    <div class="lbl">Plan</div>
+    <select class="sel" id="nuevo-plan">
+      <option value="starter">Starter — Gratis</option>
+      <option value="pro">Pro — USD 19/mes</option>
+      <option value="premium">Premium — USD 49/mes</option>
+      <option value="contador">Contador/Asesor — USD 89/mes</option>
+    </select>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-blue" style="flex:1" onclick="crearUsuario()">Crear usuario</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="document.getElementById('modal-nuevo').classList.remove('open')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+let todosUsuarios = [];
+
+const planColor = {starter:'#7A8FBA',pro:'#4D79FF',premium:'#DDA93B',contador:'#8B6FF0'};
+const planNombre = {starter:'Starter',pro:'Pro',premium:'Premium',contador:'Contador'};
+const planUSD = {starter:0,pro:19,premium:49,contador:89};
+
+function showAlert(id, msg, tipo='ok') {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = `alert show ${tipo}`;
+  setTimeout(()=> el.className='alert', 5000);
+}
+
+async function initAdmin() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href='login.html'; return; }
+
+  const { data: profile } = await sb.from('profiles').select('es_admin,email,nombre').eq('id', session.user.id).single();
+  if (!profile?.es_admin) { window.location.href='app.html'; return; }
+
+  document.getElementById('admin-email').textContent = profile.nombre || profile.email;
+  document.getElementById('splash').style.display='none';
+  document.getElementById('main').style.display='block';
+
+  await Promise.all([cargarStats(), cargarUsuarios(), cargarDiagnosticos()]);
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  window.location.href='login.html';
+}
+
+async function cargarStats() {
+  const { data: users } = await sb.from('profiles').select('plan');
+  if (!users) return;
+  const total=users.length, pro=users.filter(u=>u.plan==='pro').length,
+        prem=users.filter(u=>u.plan==='premium').length, cont=users.filter(u=>u.plan==='contador').length;
+  const mrr = pro*19 + prem*49 + cont*89;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-pro').textContent = pro;
+  document.getElementById('s-prem').textContent = prem;
+  document.getElementById('s-cont').textContent = cont;
+  document.getElementById('s-mrr').textContent = 'USD '+mrr;
+
+  const hoy = new Date().toISOString().slice(0,10);
+  const { count } = await sb.from('diagnosticos').select('id',{count:'exact'})
+    .gte('created_at', hoy+'T00:00:00Z');
+  document.getElementById('s-diag').textContent = count || 0;
+}
+
+async function cargarUsuarios() {
+  document.getElementById('tbody-usuarios').innerHTML = '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--t3)">Cargando...</td></tr>';
+  const { data } = await sb.from('profiles').select('*').order('created_at',{ascending:false});
+  if (!data) return;
+
+  // Cargar uso del mes para todos
+  const { data: usos } = await sb.from('uso_mensual').select('*')
+    .in('user_id', data.map(u=>u.id))
+    .eq('mes', new Date().toISOString().slice(0,7)+'-01');
+  const { data: totalDiag } = await sb.from('diagnosticos').select('user_id');
+
+  const usoMap = {};
+  (usos||[]).forEach(u => usoMap[u.user_id]=u);
+  const diagCount = {};
+  (totalDiag||[]).forEach(d => diagCount[d.user_id]=(diagCount[d.user_id]||0)+1);
+
+  todosUsuarios = data.map(u => ({...u, _uso: usoMap[u.id]||{}, _diag_total: diagCount[u.id]||0}));
+  renderTabla(todosUsuarios);
+}
+
+function renderTabla(users) {
+  const pc = planColor;
+  const pn = planNombre;
+  document.getElementById('tbody-usuarios').innerHTML = users.length === 0
+    ? '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--t3)">No hay resultados</td></tr>'
+    : users.map(u => `<tr>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:12px">${u.email}</td>
+      <td><div style="font-weight:600">${u.nombre||'—'}</div><div style="font-size:11px;color:var(--t3)">${u.empresa||'—'}</div></td>
+      <td style="font-size:12px;color:var(--t2)">${u.sector||'—'}</td>
+      <td><span class="plan-badge" style="background:${pc[u.plan]}20;border:1px solid ${pc[u.plan]}40;color:${pc[u.plan]}">${pn[u.plan]||u.plan}</span>
+          ${!u.plan_activo?'<span style="font-size:10px;color:#EF4F4F;margin-left:4px">SUSPENDIDO</span>':''}</td>
+      <td style="text-align:center">${u._uso.diagnosticos||0}</td>
+      <td style="text-align:center">${u._uso.consultas||0}</td>
+      <td style="text-align:center;font-weight:700">${u._diag_total}</td>
+      <td style="font-size:11px;color:var(--t3)">${new Date(u.created_at).toLocaleDateString('es-AR')}</td>
+      <td>
+        <button class="btn btn-blue" style="font-size:11px;padding:5px 10px;margin-right:4px" onclick="abrirEditar('${u.id}')">Editar</button>
+        <button class="btn btn-red" style="font-size:11px;padding:5px 10px" onclick="eliminarUsuario('${u.id}','${u.email}')">Eliminar</button>
+      </td>
+    </tr>`).join('');
+}
+
+function filtrarUsuarios() {
+  const q = document.getElementById('search').value.toLowerCase();
+  renderTabla(todosUsuarios.filter(u =>
+    (u.email||'').toLowerCase().includes(q) ||
+    (u.nombre||'').toLowerCase().includes(q) ||
+    (u.empresa||'').toLowerCase().includes(q)
+  ));
+}
+
+async function cargarDiagnosticos() {
+  const { data } = await sb.from('diagnosticos').select('*,profiles(email)').order('created_at',{ascending:false}).limit(20);
+  if (!data) return;
+  document.getElementById('tbody-diag').innerHTML = data.map(d=>`<tr>
+    <td style="font-size:11px;font-family:'JetBrains Mono',monospace">${new Date(d.created_at).toLocaleString('es-AR')}</td>
+    <td style="font-size:12px">${d.profiles?.email||'—'}</td>
+    <td style="font-size:12px;color:var(--t2)">${d.sector||'—'}</td>
+    <td><span style="font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;background:rgba(77,121,255,.15);color:var(--blue)">${d.tipo}</span></td>
+    <td style="font-size:11px;color:var(--t2);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(d.resultado||'').slice(0,120)}...</td>
+  </tr>`).join('');
+}
+
+/* EDITAR */
+function abrirEditar(id) {
+  const u = todosUsuarios.find(x=>x.id===id);
+  if (!u) return;
+  document.getElementById('edit-id').value = u.id;
+  document.getElementById('edit-nombre').value = u.nombre||'';
+  document.getElementById('edit-empresa').value = u.empresa||'';
+  document.getElementById('edit-plan').value = u.plan||'starter';
+  document.getElementById('edit-activo').value = String(u.plan_activo!==false);
+  document.getElementById('modal-titulo').textContent = 'Editar: ' + u.email;
+  document.getElementById('modal-alert').className='alert';
+  document.getElementById('modal-usuario').classList.add('open');
+}
+function cerrarModal() { document.getElementById('modal-usuario').classList.remove('open'); }
+
+async function guardarUsuario() {
+  const id=document.getElementById('edit-id').value;
+  const nombre=document.getElementById('edit-nombre').value.trim();
+  const empresa=document.getElementById('edit-empresa').value.trim();
+  const plan=document.getElementById('edit-plan').value;
+  const activo=document.getElementById('edit-activo').value==='true';
+  const {error}=await sb.from('profiles').update({nombre,empresa,plan,plan_activo:activo,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error) return showAlert('modal-alert', error.message, 'err');
+  showAlert('modal-alert','✅ Guardado correctamente','ok');
+  setTimeout(()=>{cerrarModal();cargarUsuarios();cargarStats();},1200);
+}
+
+/* NUEVO */
+function abrirNuevoUsuario() { document.getElementById('modal-nuevo').classList.add('open'); }
+
+async function crearUsuario() {
+  const email=document.getElementById('nuevo-email').value.trim();
+  const pass=document.getElementById('nuevo-pass').value;
+  const nombre=document.getElementById('nuevo-nombre').value.trim();
+  const empresa=document.getElementById('nuevo-empresa').value.trim();
+  const plan=document.getElementById('nuevo-plan').value;
+  if(!email||pass.length<8) return showAlert('nuevo-alert','Completá email y contraseña (mínimo 8 caracteres).','err');
+  // Crear via signUp (requiere service_role key para crear sin email confirm - usar como workaround)
+  const {data,error}=await sb.auth.admin?.createUser?.({email,password:pass,email_confirm:true}) ||
+    await sb.auth.signUp({email,password:pass});
+  if(error) return showAlert('nuevo-alert',error.message,'err');
+  if(data?.user){
+    await sb.from('profiles').update({nombre,empresa,plan,updated_at:new Date().toISOString()}).eq('id',data.user.id);
+  }
+  showAlert('nuevo-alert','✅ Usuario creado. Podés editar su plan en la tabla.','ok');
+  setTimeout(()=>{document.getElementById('modal-nuevo').classList.remove('open');cargarUsuarios();cargarStats();},2000);
+}
+
+/* ELIMINAR */
+async function eliminarUsuario(id, email) {
+  if(!confirm(`¿Eliminar al usuario ${email}? Esta acción no se puede deshacer.`)) return;
+  const {error}=await sb.from('profiles').delete().eq('id',id);
+  if(error) return showAlert('alert-global', error.message, 'err');
+  showAlert('alert-global',`✅ Usuario ${email} eliminado.`,'ok');
+  cargarUsuarios(); cargarStats();
+}
+
+initAdmin();
+</script>
+</body>
+</html>

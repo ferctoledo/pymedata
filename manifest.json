@@ -2,7 +2,7 @@
   "name": "PyMEdata — Inteligencia Económica para PyMEs",
   "short_name": "PyMEdata",
   "description": "Diagnóstico económico, simulador de margen y plan de acción con IA para PyMEs de La Plata. Framework FCE-UNLP.",
-  "start_url": "/app.html",
+  "start_url": "/login.html",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#05071A",
