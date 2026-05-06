@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PyMEdata — Configurar API Key</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:#05071A;font-family:'Outfit',system-ui,sans-serif;padding:20px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(77,121,255,.12) 0%,transparent 60%),#05071A;}
+.card{width:100%;max-width:400px;background:#0A0E24;border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;padding:28px;}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
+.logo-ic{width:36px;height:36px;background:linear-gradient(135deg,#2B53D5,#4D79FF);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-txt{font-size:20px;font-weight:800;color:#EFF3FF;}
+.logo-txt span{color:#4D79FF;}
+h2{font-size:15px;font-weight:700;color:#EFF3FF;margin-bottom:6px;}
+p{font-size:12px;color:#7A8FBA;line-height:1.6;margin-bottom:20px;}
+label{display:block;font-size:10px;font-weight:700;color:#3C4F70;
+  letter-spacing:.7px;text-transform:uppercase;margin-bottom:6px;}
+input{width:100%;background:#0F152E;border:1.5px solid rgba(255,255,255,.07);
+  border-radius:10px;color:#EFF3FF;font-size:13px;padding:12px 13px;
+  font-family:monospace;outline:none;margin-bottom:16px;transition:border-color .2s;}
+input:focus{border-color:rgba(77,121,255,.5);}
+input::placeholder{color:#3C4F70;}
+button{width:100%;padding:13px;border:none;border-radius:10px;
+  background:linear-gradient(135deg,#2B53D5,#4D79FF);color:#fff;
+  font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:filter .2s;}
+button:hover{filter:brightness(1.1);}
+.ok{display:none;text-align:center;padding:16px 0;}
+.ok-ico{font-size:36px;margin-bottom:8px;}
+.ok-txt{font-size:14px;color:#1EC96A;font-weight:700;margin-bottom:4px;}
+.ok-sub{font-size:12px;color:#7A8FBA;}
+.ok a{color:#4D79FF;text-decoration:none;font-weight:700;}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-ic">📊</div>
+    <span class="logo-txt">PyME<span>data</span></span>
+  </div>
+
+  <div id="form-area">
+    <h2>Configurar API Key de Anthropic</h2>
+    <p>Pegá tu key acá. Se guarda solo en este navegador — nadie más puede verla.</p>
+    <label>API Key</label>
+    <input type="text" id="key" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
+    <button onclick="guardar()">Guardar y entrar a PyMEdata</button>
+  </div>
+
+  <div class="ok" id="ok-area">
+    <div class="ok-ico">✅</div>
+    <div class="ok-txt">API Key guardada</div>
+    <div class="ok-sub">Redirigiendo a PyMEdata...</div>
+  </div>
+</div>
+
+<script>
+// Mostrar key existente si ya hay una
+const existing = localStorage.getItem('pymedata_apikey');
+if(existing) document.getElementById('key').value = existing;
+
+function guardar(){
+  const k = document.getElementById('key').value.trim();
+  if(!k){ alert('Pegá tu API Key primero.'); return; }
+  localStorage.setItem('pymedata_apikey', k);
+  document.getElementById('form-area').style.display = 'none';
+  document.getElementById('ok-area').style.display = 'block';
+  setTimeout(() => window.location.href = 'app.html', 1500);
+}
+
+document.getElementById('key').addEventListener('keydown', e => {
+  if(e.key === 'Enter') guardar();
+});
+</script>
+</body>
+</html>
