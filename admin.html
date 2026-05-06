@@ -225,9 +225,11 @@ async function initAdmin() {
   if (!session) { window.location.href='login.html'; return; }
 
   const { data: profile } = await sb.from('profiles').select('es_admin,email,nombre').eq('id', session.user.id).single();
-  if (!profile?.es_admin) { window.location.href='app.html'; return; }
+  /* Acceso: admin en BD  O  email del dueño (ADMIN_EMAILS_LIST en config.js) */
+  const esOwner = ADMIN_EMAILS_LIST.includes((session.user.email||'').toLowerCase());
+  if (!profile?.es_admin && !esOwner) { window.location.href='app.html'; return; }
 
-  document.getElementById('admin-email').textContent = profile.nombre || profile.email;
+  document.getElementById('admin-email').textContent = profile?.nombre || profile?.email || session.user.email;
   document.getElementById('splash').style.display='none';
   document.getElementById('main').style.display='block';
 

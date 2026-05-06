@@ -167,6 +167,10 @@ select option{background:var(--bg2);color:var(--t1);}
 <script>
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+/* ══ EMAILS CON ACCESO TOTAL (dueño/admin) ══
+   Definido en config.js — modificar allí si cambia el email.  */
+const OWNER_EMAILS = ADMIN_EMAILS_LIST;
+
 /* ══ ESTADO GLOBAL ══ */
 let USER = null;      // auth user
 let PROFILE = null;   // profile row
@@ -200,12 +204,32 @@ async function initAuth() {
   const { data: profile } = await sb.from('profiles').select('*').eq('id', USER.id).single();
   PROFILE = profile;
 
+  /* ── ADMIN OVERRIDE · Fernando Toledo · Dueño de PyMEdata ──────────────
+     Si el email coincide con el del dueño, se asigna plan premium completo
+     y acceso de administrador, independientemente del valor en la BD.
+     Para cambiar el email, modificar la constante OWNER_EMAIL en config.js  */
+  if (USER?.email && OWNER_EMAILS.includes(USER.email.toLowerCase())) {
+    PROFILE = Object.assign({}, PROFILE || {}, {
+      plan:      'premium',
+      es_admin:  true,
+      plan_activo: true,
+      nombre:    PROFILE?.nombre || 'Fernando Toledo',
+    });
+  }
+  /* ─────────────────────────────────────────────────────────────────────── */
+
   // Cargar uso del mes
   const { data: uso } = await sb.from('uso_mensual')
     .select('*').eq('user_id', USER.id)
     .eq('mes', new Date().toISOString().slice(0,7) + '-01')
     .single();
   USO = uso || { diagnosticos:0, planes:0, consultas:0, escenarios:0 };
+
+  /* Reiniciar contadores de uso para el owner (nunca alcanza límites) */
+  if (USER?.email && OWNER_EMAILS.includes(USER.email.toLowerCase())) {
+    USO = { diagnosticos:0, planes:0, consultas:0, escenarios:0 };
+  }
+  /* ─────────────────────────────────────────────────────────────────────── */
 
   // Cargar perfil empresa si existe
   const { data: ep } = await sb.from('empresa_perfiles')

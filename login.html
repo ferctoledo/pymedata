@@ -166,6 +166,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 <script src="config.js"></script>
 <script>
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+/* ADMIN_EMAILS_LIST viene de config.js */
 
 let planSeleccionado = 'starter';
 
@@ -221,9 +222,9 @@ async function doLogin() {
     return showAlert(msgs[error.message] || error.message);
   }
 
-  /* Verificar si es admin */
+  /* Verificar si es admin (por BD o por email de dueño) */
   const { data: profile } = await sb.from('profiles').select('es_admin').eq('id', data.user.id).single();
-  if (profile?.es_admin) {
+  if (profile?.es_admin || ADMIN_EMAILS_LIST.includes(data.user.email.toLowerCase())) {
     window.location.href = 'admin.html';
   } else {
     window.location.href = 'app.html';
