@@ -674,8 +674,11 @@ function R(){
   const pc = planColor(plan);
   document.getElementById("hright").innerHTML =
     `${S.ok&&se?`<div class="hbadge" style="color:var(--t2)">${se.e} ${se.l.split("/")[0].trim()}</div>`:``}
-     <div class="hbtn ${S.sc==="cuenta"?"on":""}" onclick="set({sc:'cuenta',stab:''})">
-       <span class="plan-chip" style="background:${pc}20;border:1px solid ${pc}40;color:${pc}">${planNombre(plan)}</span>
+     <div class="hbtn ${S.sc==="cuenta"?"on":""}" onclick="set({sc:'cuenta',stab:''})"
+       style="display:flex;align-items:center;gap:5px;padding:6px 10px;font-size:12px;font-weight:700;color:${S.sc==="cuenta"?"var(--blue)":"var(--t1)"}">
+       <span style="font-size:15px">👤</span>
+       <span>Mi Cuenta</span>
+       <span class="plan-chip" style="background:${pc}20;border:1px solid ${pc}40;color:${pc};margin-left:2px">${planNombre(plan)}</span>
      </div>`;
   document.getElementById("scr").innerHTML = (PG[S.sc]||pgInicio)();
   document.getElementById("nav").innerHTML = NAV.map(it=>`<button class="nb ${S.sc===it.id?"on":""}" onclick="navTo('${it.id}')"><span class="nb-i">${it.e}</span><span class="nb-l">${it.l}</span></button>`).join("");
