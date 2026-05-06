@@ -356,48 +356,34 @@ function calcSim(){
   return{p0,cF,m0,mF,pN,adj:(pN-p0)/p0*100,loss:m0-mF};
 }
 
-/* ══ API IA — vía proxy Supabase (la key nunca llega al navegador) ══ */
+/* ══ API IA ══ */
 const SYS=`Asesor económico PyMEs argentinas, La Plata, FCE-UNLP. Plataforma PyMEdata. Marco Fernando Toledo: Canal Precio(inflación→costos→márgenes), Canal Crédito(tasas→financiamiento), Canal Demanda(salarios→consumo), Canal Cambiario(TC→insumos). Datos: IPC mar/26:3.4%/mes·32.6% i.a. TC:$1.429→$1.707 dic/26. TAMAR:30.9%→24.2% TNA dic/26. PIB 2026:+3.4%. Español rioplatense. Concreto, accionable. **negrita** conceptos clave.`;
 
-async function callAI(u, s) {
-  try {
-    // Obtener token de sesión del usuario actual
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session?.access_token) {
-      return "⚠️ Sesión expirada. Volvé a iniciar sesión.";
-    }
+function getApiKey(){ return localStorage.getItem('pymedata_apikey')||''; }
+function saveApiKey(k){ k ? localStorage.setItem('pymedata_apikey',k.trim()) : localStorage.removeItem('pymedata_apikey'); }
 
-    // Llamar al proxy de Supabase — la API key de Anthropic nunca llega al navegador
-    const r = await fetch(`${SUPABASE_URL}/functions/v1/ai-proxy`, {
-      method: "POST",
-      headers: {
-        "Content-Type":  "application/json",
-        "Authorization": `Bearer ${session.access_token}`,
-        "apikey":        SUPABASE_ANON,
+async function callAI(u,s){
+  const key = getApiKey();
+  if(!key) return "⚠️ Configurá tu API Key en Mi Cuenta para usar esta función.";
+  try{
+    const r = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "x-api-key": key,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
       },
-      body: JSON.stringify({
-        model:      "claude-3-5-sonnet-20241022",
-        max_tokens: 1000,
-        system:     s,
-        messages:   [{ role: "user", content: u }],
-      }),
+      body:JSON.stringify({model:"claude-haiku-4-5",max_tokens:1000,system:s,messages:[{role:"user",content:u}]})
     });
-
     const d = await r.json();
-
-    if (!r.ok) {
-      const msg = d?.error?.message || "";
-      if (r.status === 401) return "⚠️ Sesión inválida. Volvé a iniciar sesión.";
-      if (r.status === 403) return "⚠️ " + (msg || "Tu plan no incluye funciones IA. Actualizá en Mi Cuenta.");
-      if (r.status === 429) return "⚠️ Límite de uso alcanzado. Esperá un momento e intentá de nuevo.";
-      return "⚠️ " + (msg || `Error ${r.status}. Intentá de nuevo.`);
+    if(!r.ok){
+      if(r.status===401) return "⚠️ API Key inválida. Verificala en Mi Cuenta.";
+      if(r.status===429) return "⚠️ Límite de uso alcanzado. Esperá un momento.";
+      return "⚠️ Error: " + (d?.error?.message||r.status);
     }
-
-    return d.content?.filter(b => b.type === "text").map(b => b.text).join("\n").trim() || "Sin respuesta.";
-
-  } catch (e) {
-    return "⚠️ Error de conexión. Verificá tu red e intentá de nuevo.";
-  }
+    return d.content?.filter(b=>b.type==="text").map(b=>b.text).join("\n").trim()||"Sin respuesta.";
+  }catch(e){ return "⚠️ Error de conexión. Verificá tu red."; }
 }
 async function gDiag(){
   if (!puede('diagnosticos')) { set({stab:'analisis'}); return; }
@@ -629,6 +615,31 @@ function pgCuenta(){
       ${plan===p.id?`<span style="font-size:10px;font-weight:700;color:${p.c};border:1px solid ${p.c}40;border-radius:5px;padding:3px 8px">ACTIVO</span>`:`<button style="background:${p.c};color:${p.id==="starter"?"#09090E":"#fff"};border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif" onclick="alert('Integración de pagos próximamente. Contactar a Fernando Toledo para activar plan.')">Cambiar</button>`}
     </div>
   </div>`).join("")}
+  <div class="stl" style="margin-top:8px">API Key de Anthropic</div>
+  <div class="card2" style="margin-bottom:14px">
+    <div style="font-size:12px;color:var(--t2);margin-bottom:10px;line-height:1.6">
+      Necesaria para usar Diagnóstico IA, Plan de Acción, Consultas y Escenarios.<br>
+      Obtenela en <a href="https://console.anthropic.com" target="_blank" style="color:var(--blue)">console.anthropic.com</a> → API Keys.
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input id="apikey-inp" class="inp" type="password" placeholder="sk-ant-..."
+        value="${getApiKey()}"
+        style="flex:1;margin-bottom:0;font-family:monospace;font-size:12px">
+      <button onclick="
+        const v=document.getElementById('apikey-inp').value.trim();
+        saveApiKey(v);
+        const b=event.target;
+        b.textContent='✓ Guardada';b.style.background='#1EC96A';
+        setTimeout(()=>{b.textContent='Guardar';b.style.background='';},2000);
+        R();"
+        style="background:var(--blue);color:#fff;border:none;border-radius:10px;
+          padding:10px 14px;font-size:12px;font-weight:700;cursor:pointer;
+          font-family:inherit;white-space:nowrap;flex-shrink:0">Guardar</button>
+    </div>
+    ${getApiKey()
+      ? `<div style="margin-top:8px;font-size:11px;color:var(--green)">✓ API Key configurada · ${getApiKey().slice(0,14)}••••</div>`
+      : `<div style="margin-top:8px;font-size:11px;color:var(--red)">✗ Sin API Key — las funciones IA no están disponibles</div>`}
+  </div>
   <div class="stl" style="margin-top:8px">Sesión</div>
   <button class="btn btn-r" onclick="doLogout()">🚪&nbsp; Cerrar sesión</button>
   </div>`;
